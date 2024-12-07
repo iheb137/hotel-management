@@ -20,7 +20,7 @@
                 {% if room.Thumbnail %}
                     <img src="{{ asset(room.Thumbnail) }}" alt="Room Thumbnail" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover;" />
                 {% else %}
-                    <img src="{{ asset('images/default-room.jpg') }}" alt="Default Room Thumbnail" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover;" />
+                    <img src="{{ asset('assets/images/default-room.jpg') }}" alt="Default Room Thumbnail" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover;" />
                 {% endif %}
             </div>
             <h3 style="margin: 0 0 10px; font-size: 24px; font-weight: bold;">{{ room.name }}</h3>
@@ -38,19 +38,17 @@
             {{ form_start(form) }}
 
             <div style="margin-bottom: 15px;">
-                {{ form_row(form.StartDate, {'attr': {'style': 'width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 5px;'}}) }}
+                {{ form_row(form.StartDate, {'attr': {'style': 'width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 5px;', 'id': 'start-date'}}) }}
             </div>
 
             <div style="margin-bottom: 15px;">
-                {{ form_row(form.EndDate, {'attr': {'style': 'width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 5px;'}}) }}
+                {{ form_row(form.EndDate, {'attr': {'style': 'width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 5px;', 'id': 'end-date'}}) }}
             </div>
 
-            <div id="price" style="font-weight: bold; margin-top: 20px; font-size: 20px; color: #333;">
-                Total Price: $<span id="total-price">0</span>
+            <!-- Total Price Display -->
+            <div id="total-price" style="font-weight: bold; font-size: 20px; color: #ff5722; margin-top: 20px;">
+                Total Price: $0
             </div>
-
-            <!-- Button to manually calculate price -->
-
 
             <button type="submit" style="background-color: #ff5722; color: white; padding: 10px; width: 100%; border: none; border-radius: 5px; font-size: 16px; margin-top: 20px;">
                 BOOK NOW
@@ -59,7 +57,6 @@
             {{ form_end(form) }}
         </aside>
     </main>
-
 
 
 {% endblock %}
