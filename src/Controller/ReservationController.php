@@ -75,7 +75,14 @@ class ReservationController extends AbstractController
     #[Route('/reservation', name: 'app_reservation_index', methods: ['GET'])]
     public function index(ReservationRepository $reservationRepository): Response
     {
-        $reservations = $reservationRepository->findAll();
+        $user = $this->getUser();
+
+        if (!$user) {
+            throw $this->createAccessDeniedException('You need to be logged in to view reservations.');
+        }
+
+        $reservations = $reservationRepository->findBy(['user' => $user]);
+
         return $this->render('reservation/index.html.twig', [
             'reservations' => $reservations,
         ]);
