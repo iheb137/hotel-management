@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\Reservation;
 use App\Entity\Room;
 use App\Form\ReservationFormType;
+use App\Form\ReservationFormType2;
 use App\Repository\ReservationRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -14,7 +15,6 @@ use Symfony\Component\Routing\Attribute\Route;
 
 class ReservationController extends AbstractController
 {
-
 
 
 
@@ -44,7 +44,6 @@ class ReservationController extends AbstractController
                 return $this->redirectToRoute('app_reservation_new', ['id' => $room->getId()]);
             }
 
-            // Calculate the price
             $days = $startDate->diff($endDate)->days;
             $prix = $days * $room->getPrix();
             $reservation->setPrix($prix);
@@ -52,7 +51,12 @@ class ReservationController extends AbstractController
             $currentDate = new \DateTime();
             if ($currentDate >= $startDate && $currentDate <= $endDate) {
                 $reservation->setStatut('encour');
-            } else {
+            }
+            else if ($currentDate < $startDate)
+            {
+                $reservation->setStatut('pending');
+            }
+            else{
                 $reservation->setStatut('completed');
             }
 
@@ -92,6 +96,53 @@ class ReservationController extends AbstractController
 
         $this->addFlash('success', 'Reservation supprimée avec succès.');
         return $this->redirectToRoute('admin_reservation_list');
+    }
+    #[Route('admin/reservation/ajout', name: 'admin_reservation_ajout')]
+    public function ajout_reservation(Request $request, EntityManagerInterface $entityManager): Response
+    {
+        $reservation = new Reservation();
+
+        $form = $this->createForm(ReservationFormType2::class, $reservation);
+
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $startDate = $reservation->getStartDate();
+            $endDate = $reservation->getEndDate();
+            $room = $reservation->getRoom();
+            if ($startDate > $endDate) {
+                $this->addFlash('error', 'Start date must be before end date.');
+                return $this->redirectToRoute('app_reservation_new', ['id' => $room->getId()]);
+            }
+
+            $interval = $startDate->diff($endDate);
+            if ($interval->m > 1 || $interval->days > 31) {
+                $this->addFlash('error', 'Reservation duration cannot exceed 1 month.');
+                return $this->redirectToRoute('app_reservation_new', ['id' => $room->getId()]);
+            }
+
+            $days = $startDate->diff($endDate)->days;
+            $prix = $days * $room->getPrix();
+            $reservation->setPrix($prix);
+
+            $currentDate = new \DateTime();
+            if ($currentDate >= $startDate && $currentDate <= $endDate) {
+                $reservation->setStatut('encour');
+            }
+            else if ($currentDate < $startDate)
+            {
+                $reservation->setStatut('pending');
+            }
+            else{
+                $reservation->setStatut('completed');
+            }
+            $entityManager->persist($reservation);
+            $entityManager->flush();
+            return $this->redirectToRoute('admin_reservation_list');
+        }
+        return $this->render('reservation/new_reservation.html.twig', [
+            'form' => $form->createView(),
+        ]);
     }
 
 }

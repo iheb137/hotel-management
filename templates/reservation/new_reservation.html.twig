@@ -1,0 +1,12 @@
+{% extends 'baseAdmin.html.twig' %}
+
+{% block body %}
+    <div class="container mt-5">
+        <h2>Make a New Reservation</h2>
+
+        {{ form_start(form) }}
+        {{ form_widget(form) }}
+        <button type="submit" class="btn btn-primary mt-2">Submit Reservation</button>
+        {{ form_end(form) }}
+    </div>
+{% endblock %}
