@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="zxx">
+
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>Hotux</title>
+    <!-- Favicon -->
+    <link rel="shortcut icon" type="image/x-icon" href="{{asset('assets/images/favicon.png')}}">
+    <!-- Bootstrap core CSS -->
+    <link href="{{ asset('assets/css/bootstrap.min.css')}}" rel="stylesheet" type="text/css">
+    <!--Default CSS-->
+    <link href="{{ asset('assets/css/default.css')}}" rel="stylesheet" type="text/css">
+    <!--Custom CSS-->
+    <link href="{{ asset('assets/css/style.css')}}" rel="stylesheet" type="text/css">
+    <!--Plugin CSS-->
+    <link href="{{ asset('assets/css/plugin.css')}}" rel="stylesheet" type="text/css">
+    <!--Dashboard CSS-->
+    <link href="{{ asset('assets/css/dashboard.css')}}" rel="stylesheet" type="text/css">
+    <!--Icons CSS-->
+    <link href="{{ asset('assets/css/icons.css')}}" rel="stylesheet" type="text/css">
+    <!--Font Awesome-->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css')}}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.min.css')}}">
+    {% block stylesheets %}
+    {% endblock %}
+</head>
+<body>
+<!-- Preloader -->
+<div id="preloader">
+    <div id="status"></div>
+</div>
+<!-- Preloader Ends -->
+
+<!-- start Container Wrapper -->
+<div id="container-wrapper">
+    <!-- Dashboard -->
+    <div id="dashboard">
+
+        <!-- Responsive Navigation Trigger -->
+        <a href="#" class="dashboard-responsive-nav-trigger"><i class="fa fa-reorder"></i> Dashboard Navigation</a>
+        <div class="dashboard-sticky-nav">
+            <div class="content-left pull-left">
+                <a href="dashboard.html"><img src="{{asset('assets/images/logo.png')}}" alt="logo"></a>
+            </div>
+            <div class="content-right pull-right">
+                <div class="search-bar">
+                    <form>
+                        <div class="form-group">
+                            <input type="text" class="form-control" id="search" placeholder="Search Now">
+                            <a href="#"><span class="search_btn"><i class="fa fa-search" aria-hidden="true"></i></span></a>
+                        </div>
+                    </form>
+                </div>
+                <div class="dropdown">
+                    <a class="dropdown-toggle" data-toggle="dropdown">
+                        <div class="profile-sec">
+                            <div class="dash-image">
+                                <img src="{{asset('assets/images/comment.jpg')}}" alt="">
+                            </div>
+                            <div class="dash-content">
+                                <h4>Loural Teak</h4>
+                                <span>Post Manager</span>
+                            </div>
+                        </div>
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li><a href="#"><i class="sl sl-icon-settings"></i>Settings</a></li>
+                        <li><a href="#"><i class="sl sl-icon-user"></i>Profile</a></li>
+                        <li><a href="#"><i class="sl sl-icon-lock"></i>Change Password</a></li>
+                        <li><a href="#"><i class="sl sl-icon-power"></i>Logout</a></li>
+                    </ul>
+                </div>
+                <div class="dropdown">
+                    <a class="dropdown-toggle" data-toggle="dropdown">
+                        <div class="dropdown-item">
+                            <i class="sl sl-icon-envelope-open"></i>
+                            <span class="notify">3</span>
+                        </div>
+                    </a>
+                    <div class="dropdown-menu notification-menu">
+                        <h4> 23 Messages</h4>
+                        <ul>
+                            <li>
+                                <a href="#">
+                                    <div class="notification-item">
+                                        <div class="notification-image">
+                                            <img src="{{asset('assets/images/comment.jpg')}}" alt="">
+                                        </div>
+                                        <div class="notification-content">
+                                            <p>You have a notification.</p><span class="notification-time">2 hours ago</span>
+                                        </div>
+                                    </div>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="#">
+                                    <div class="notification-item">
+                                        <div class="notification-image">
+                                            <img src="{{asset('assets/images/comment.jpg')}}" alt="">
+                                        </div>
+                                        <div class="notification-content">
+                                            <p>You have a notification.</p><span class="notification-time">2 hours ago</span>
+                                        </div>
+                                    </div>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="#">
+                                    <div class="notification-item">
+                                        <div class="notification-image">
+                                            <img src="{{asset('assets/images/comment.jpg')}}" alt="">
+                                        </div>
+                                        <div class="notification-content">
+                                            <p>You have a notification.</p><span class="notification-time">2 hours ago</span>
+                                        </div>
+                                    </div>
+                                </a>
+                            </li>
+                        </ul>
+                        <p class="all-noti"><a href="#">See all messages</a></p>
+                    </div>
+                </div>
+                <div class="dropdown">
+                    <a class="dropdown-toggle" data-toggle="dropdown">
+                        <div class="dropdown-item">
+                            <i class="sl sl-icon-bell"></i>
+                            <span class="notify">3</span>
+                        </div>
+                    </a>
+                    <div class="dropdown-menu notification-menu">
+                        <h4> 599 Notifications</h4>
+                        <ul>
+                            <li>
+                                <a href="#">
+                                    <div class="notification-item">
+                                        <div class="notification-image">
+                                            <img src="{{asset('assets/images/comment.jpg')}}" alt="">
+                                        </div>
+                                        <div class="notification-content">
+                                            <p>You have a notification.</p><span class="notification-time">2 hours ago</span>
+                                        </div>
+                                    </div>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="#">
+                                    <div class="notification-item">
+                                        <div class="notification-image">
+                                            <img src="{{asset('assets/images/comment.jpg')}}" alt="">
+                                        </div>
+                                        <div class="notification-content">
+                                            <p>You have a notification.</p><span class="notification-time">2 hours ago</span>
+                                        </div>
+                                    </div>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="#">
+                                    <div class="notification-item">
+                                        <div class="notification-image">
+                                            <img src="{{asset('assets/images/comment.jpg')}}" alt="">
+                                        </div>
+                                        <div class="notification-content">
+                                            <p>You have a notification.</p><span class="notification-time">2 hours ago</span>
+                                        </div>
+                                    </div>
+                                </a>
+                            </li>
+                        </ul>
+                        <p class="all-noti"><a href="#">See all notifications</a></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="dashboard-nav">
+            <div class="dashboard-nav-inner">
+                <ul>
+                    <li class="{%  if selected is defined and selected=='dashboard'%} active{% endif %}"><a href="{{ path('app_dashboard') }}"><i class="sl sl-icon-settings"></i> Tableau de bord</a></li>
+                    <li><a href="dashboard-my-profile.html"><i class="sl sl-icon-user"></i> Modifier Profile</a></li>
+                    <li><a href="dashboard-addtour.html"><i class="sl sl-icon-plus"></i> Add Rooms</a></li>
+                    <li class="{%  if selected is defined and selected=='chambre'%} active{% endif %}">
+                        <a><i class="sl sl-icon-layers"></i> Chambres</a>
+                        <ul>
+                            <li><a href="{{ path('ajout_room') }}">Ajouter <span class="nav-tag green">6</span></a></li>
+                            <li><a href="{{ path('all_room') }}">Liste <span class="nav-tag yellow">1</span></a></li>
+                        </ul>
+                    </li>
+
+                    <li class="{%  if selected is defined and selected=='evenement'%} active{% endif %}">
+                        <a><i class="sl sl-icon-layers"></i> Evenements</a>
+                        <ul>
+                            <li><a href="{{ path('ajout_event') }}">Ajouter <span class="nav-tag green">6</span></a></li>
+                            <li><a href="{{ path('all_event') }}">Liste <span class="nav-tag yellow">1</span></a></li>
+                        </ul>
+                    </li>
+                    <li class="{%  if selected is defined and selected=='reservation'%} active{% endif %}">
+                        <a><i class="sl sl-icon-layers"></i> Reservation</a>
+                        <ul>
+                            <li><a href="{{ path('admin_reservation_list') }}">Ajouter <span class="nav-tag green">6</span></a></li>
+                            <li><a href="{{ path('admin_reservation_list') }}">Liste <span class="nav-tag green">6</span></a></li>
+
+                        </ul>
+                    </li>                    <li><a href="dashboard-reviews.html"><i class="sl sl-icon-star"></i> Reviews</a></li>
+                    <li><a href="{{ path('app_logout') }}"><i class="sl sl-icon-power"></i> Déconnexion</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="dashboard-content">
+
+{% block body %}{% endblock %}
+        </div>
+    </div>
+</div>
+<!-- end Container Wrapper -->
+
+<!-- Back to top start -->
+<div id="back-to-top">
+    <a href="#"></a>
+</div>
+<!-- Back to top ends -->
+
+
+<script src="{{ asset('assets/js/jquery-3.3.1.min.js') }}"></script>
+<script src="{{ asset('assets/js/bootstrap.min.js') }}"></script>
+<script src="{{ asset('assets/js/plugin.js') }}"></script>
+<script src="{{ asset('assets/js/main.js') }}"></script>
+<script src="{{ asset('assets/https://canvasjs.com/assets/script/canvasjs.min.js') }}"></script>
+<script src="{{ asset('assets/js/chart.js') }}"></script>
+<script src="{{ asset('assets/js/dashboard.js') }}"></script>
+{% block javascripts %}
+{% endblock %}
+</body>
+
+</html>

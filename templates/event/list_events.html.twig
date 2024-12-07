@@ -1,0 +1,65 @@
+{% extends 'baseAdmin.html.twig' %}
+
+
+
+{% block body %}
+
+    <div class="container my-5">
+        <h3>Liste des évenements</h3>
+        <a href="{{ path('ajout_event') }}" class="btn btn-primary mb-3">
+            <i class="fas fa-plus-circle"></i> Ajouter un évenement
+        </a>
+        <div class="card">
+            <div class="card-body">
+                <table class="table table-striped table-responsive-md">
+                    <thead>
+                    <tr>
+                        <th>Thumbnail</th>
+
+                        <th>Nom</th>
+                        <th>Prix</th>
+                        <th>Date</th>
+                        <th>Description</th>
+                        <th>Modifier</th>
+                        <th>Supprimer</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for event in events %}
+                        <tr>
+                            <td>
+                                {% if event.thumbnail %}
+                                    <img src="{{ asset(event.thumbnail) }}" alt="Thumbnail" class="img-thumbnail" style="width: 100px; height: auto;">
+                                {% else %}
+                                    <span class="text-muted">No Image</span>
+                                {% endif %}
+                            </td>
+                            <td>{{ event.name }}</td>
+                            <td>{{ event.prix }}</td>
+                            <td>{{ event.date|date('Y-m-d H:i') }}</td>
+                            <td>{{ event.description }}</td>
+
+                            <td>
+                                <a href="{{ path('edit_event', {'id': event.id}) }}" class="btn btn-warning">
+                                    <i class="fa fa-pencil"></i>
+                                </a>
+                            </td>
+                            <td>
+                                <a href="{{ path('delete_event', {'id': event.id}) }}" class="btn btn-danger" onclick="return confirm('Êtes-vous sûr de vouloir supprimer cet évenement ?');">
+                                    <i class="fa fa-trash-alt"></i>
+                                </a>
+                            </td>
+                        </tr>
+                    {% else %}
+                        <tr>
+                            <td colspan="6" class="text-center">Aucun évenement trouvé</td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
+

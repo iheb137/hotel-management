@@ -1,0 +1,46 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Reservations{% endblock %}
+
+{% block body %}
+    <section class="breadcrumb-outer">
+        <div class="container">
+            <div class="breadcrumb-content">
+                <h2>Reservations</h2>
+
+            </div>
+        </div>
+    </section>
+
+    <table class="table">
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>Room</th>
+            <th>User</th>
+            <th>Start Date</th>
+            <th>End Date</th>
+            <th>Price</th>
+            <th>Status</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for reservation in reservations %}
+            <tr>
+                <td>{{ reservation.id }}</td>
+                <td>{{ reservation.room.name }}</td>
+                <td>{{ reservation.user.email }}</td>
+                <td>{{ reservation.startDate|date('Y-m-d') }}</td>
+                <td>{{ reservation.endDate|date('Y-m-d') }}</td>
+                <td>{{ reservation.prix }}</td>
+                <td>{{ reservation.statut }}</td>
+
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="8">No reservations found.</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}

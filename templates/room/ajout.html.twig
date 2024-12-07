@@ -1,0 +1,89 @@
+{% extends 'baseAdmin.html.twig' %}
+
+{% block title %}Room Management{% endblock %}
+
+{% block body %}
+
+    <div class="container my-5">
+        <h3>{{ is_edit ? 'Modifier une Chambre' : 'Ajouter une Chambre' }}</h3>
+
+        <div class="card">
+            <div class="card-body">
+                <div class="col-md-10">
+                    {{ form_start(RoomForm, {
+                        'attr': {
+                            'class': 'form'
+                        },
+                        'action': is_edit ? path('edit_room', {'id': roomId}) : path('ajout_room'),
+                        'method': 'post'
+                    }) }}
+
+                    <!-- Room Name -->
+                    <div class="form-group col-md-8">
+                        {{ form_label(RoomForm.name, 'Nom de la chambre', {'label_attr': {'class': 'col-form-label'}}) }}
+                        {{ form_widget(RoomForm.name, {
+                            'attr': {
+                                'class': 'form-control',
+                                'placeholder': 'Nom de la chambre'
+                            }
+                        }) }}
+                    </div>
+
+                    <!-- Number of Beds -->
+                    <div class="form-group col-md-8">
+                        {{ form_label(RoomForm.bedNbr, 'Nombre de lits', {'label_attr': {'class': 'col-form-label'}}) }}
+                        {{ form_widget(RoomForm.bedNbr, {
+                            'attr': {
+                                'class': 'form-control',
+                                'placeholder': 'Nombre de lits'
+                            }
+                        }) }}
+                    </div>
+
+                    <!-- Price -->
+                    <div class="form-group col-md-8">
+                        {{ form_label(RoomForm.prix, 'Prix de la chambre', {'label_attr': {'class': 'col-form-label'}}) }}
+                        {{ form_widget(RoomForm.prix, {
+                            'attr': {
+                                'class': 'form-control',
+                                'placeholder': 'Prix de la chambre'
+                            }
+                        }) }}
+                    </div>
+
+                    <!-- Description -->
+                    <div class="form-group col-md-8">
+                        {{ form_label(RoomForm.description, 'Description', {'label_attr': {'class': 'col-form-label'}}) }}
+                        {{ form_widget(RoomForm.description, {
+                            'attr': {
+                                'class': 'form-control',
+                                'placeholder': 'Description de la chambre'
+                            }
+                        }) }}
+                    </div>
+
+                    <!-- Thumbnail Upload -->
+                    <div class="form-group col-md-8">
+                        {{ form_label(RoomForm.thumbnail, 'Charger Thumbnail') }}
+                        {{ form_widget(RoomForm.thumbnail, {
+                            'attr': {
+                                'class': 'form-control-file',
+                                'accept': 'image/*'
+                            }
+                        }) }}
+                    </div>
+
+                    <!-- Submit Button -->
+                    <div class="col-md-6">
+                        <button type="submit" class="btn btn-primary mt-3">
+                            {{ is_edit ? 'Modifier' : 'Ajouter' }}
+                        </button>
+                    </div>
+
+                    {{ form_end(RoomForm) }}
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

@@ -1,0 +1,62 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}New Reservation{% endblock %}
+
+{% block body %}
+    <section class="breadcrumb-outer">
+        <div class="container">
+            <div class="breadcrumb-content">
+                <h2>Reserver une chambre</h2>
+
+            </div>
+        </div>
+    </section>
+    {# Render the reservation form #}
+    {{ form_start(form) }}
+
+    <div>
+        {{ form_row(form.StartDate) }}
+        {{ form_row(form.EndDate) }}
+    </div>
+
+    <div id="price" style="font-weight: bold; margin-top: 20px; font-size: 24px;">
+        Total Price: $<span id="total-price">0</span>
+    </div>
+
+    {# Manually add the submit button #}
+    <button type="submit" class="btn btn-primary mt-4">Submit</button>
+
+    {{ form_end(form) }}
+
+    {# Button to navigate back to create a new reservation for the same room #}
+    <a href="{{ path('app_reservation_new', { id: room.id }) }}" class="btn btn-secondary mt-2">
+        Back to Reservation
+    </a>
+
+    {# JavaScript to calculate and update the price dynamically #}
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const startDateInput = document.getElementById('reservation_startDate');
+            const endDateInput = document.getElementById('reservation_endDate');
+            const totalPriceSpan = document.getElementById('total-price');
+            const pricePerNight = {{ room.prix }};  // Inject the price directly from PHP
+
+            function updatePrice() {
+                const startDate = new Date(startDateInput.value);
+                const endDate = new Date(endDateInput.value);
+
+                if (startDate && endDate && endDate > startDate) {
+                    const timeDifference = endDate - startDate;
+                    const days = Math.ceil(timeDifference / (1000 * 60 * 60 * 24));
+                    const totalPrice = days * pricePerNight;
+                    totalPriceSpan.innerText = totalPrice;
+                } else {
+                    totalPriceSpan.innerText = 0;
+                }
+            }
+
+            startDateInput.addEventListener('change', updatePrice);
+            endDateInput.addEventListener('change', updatePrice);
+        });
+    </script>
+{% endblock %}

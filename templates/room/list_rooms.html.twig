@@ -1,0 +1,69 @@
+{% extends 'baseAdmin.html.twig' %}
+
+{% block body %}
+
+    <div class="container my-5">
+        <h3>Liste des Chambres</h3>
+
+        <a href="{{ path('ajout_room') }}" class="btn btn-primary mb-3">
+            <i class="fas fa-plus-circle"></i> Ajouter une Chambre
+        </a>
+
+        <div class="card">
+            <div class="card-body">
+                <table class="table table-striped table-responsive-md">
+                    <thead>
+                    <tr>
+                        <th>Thumbnail</th>
+                        <th>Nom</th>
+                        <th>Nombre de lits</th>
+                        <th>Prix</th>
+                        <th>Description</th>
+                        <th>Modifier</th>
+                        <th>Supprimer</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for room in rooms %}
+                        <tr>
+                            <td>
+                                {% if room.thumbnail %}
+                                    <img src="{{ asset(room.thumbnail) }}" alt="Thumbnail" class="img-thumbnail" style="width: 100px; height: auto;">
+                                {% else %}
+                                    <span class="text-muted">No Image</span>
+                                {% endif %}
+                            </td>
+
+                            <!-- Room Information -->
+                            <td>{{ room.name }}</td>
+                            <td>{{ room.bedNbr }}</td>
+                            <td>{{ room.prix }}</td>
+                            <td>{{ room.description }}</td>
+
+                            <!-- Edit Button -->
+                            <td>
+                                <a href="{{ path('edit_room', {'id': room.id}) }}" class="btn btn-warning">
+                                    <i class="fa fa-pencil"></i>
+                                </a>
+                            </td>
+
+                            <!-- Delete Button -->
+                            <td>
+                                <a href="{{ path('delete_room', {'id': room.id}) }}" class="btn btn-danger"
+                                   onclick="return confirm('Êtes-vous sûr de vouloir supprimer cette chambre ?');">
+                                    <i class="fa fa-trash-alt"></i>
+                                </a>
+                            </td>
+                        </tr>
+                    {% else %}
+                        <tr>
+                            <td colspan="7" class="text-center">Aucune chambre trouvée</td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

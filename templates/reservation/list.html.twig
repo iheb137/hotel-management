@@ -1,0 +1,42 @@
+{% extends 'baseAdmin.html.twig' %}
+{% block body %}
+
+
+    <table class="table">
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>Room</th>
+            <th>User</th>
+            <th>Start Date</th>
+            <th>End Date</th>
+            <th>Price</th>
+            <th>Status</th>
+            <th>Supprimer</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for reservation in reservations %}
+            <tr>
+                <td>{{ reservation.id }}</td>
+                <td>{{ reservation.room.name }}</td>
+                <td>{{ reservation.user.email }}</td>
+                <td>{{ reservation.startDate|date('Y-m-d') }}</td>
+                <td>{{ reservation.endDate|date('Y-m-d') }}</td>
+                <td>{{ reservation.prix }}</td>
+                <td>{{ reservation.statut }}</td>
+                <td>
+                    <a href="{{ path('delete_reservation', {'id': reservation.id}) }}" class="btn btn-danger"
+                       onclick="return confirm('Êtes-vous sûr de vouloir supprimer cette réservation ?');">
+                        <i class="fa fa-trash-alt"></i>
+                    </a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="8">No reservations found.</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}

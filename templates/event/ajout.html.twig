@@ -1,0 +1,62 @@
+{% extends 'baseAdmin.html.twig' %}
+
+{% block title %}Hello AdminController!{% endblock %}
+
+{% block body %}
+
+    <div class="container my-5">
+        <h3>{{ is_edit ? 'Modifier un Evenement' : 'Ajouter un Evenement' }}</h3>
+        <div class="card">
+            <div class="card-body">
+                <div class="col-md-10">
+                    {{ form_start(EventForm, {
+                        'attr': {
+                            'class': 'form'
+                        },
+                        'action': is_edit ? path('edit_event', {'id': eventId}) : path('ajout_event'),
+                        'method': 'post'
+                    }) }}
+
+                    <div class="row">
+                        <div class="form-group col-md-8">
+                            {{ form_label(EventForm.name, 'Nom de l evenement', {'label_attr': {'class': 'col-form-label'}}) }}
+                            {{ form_widget(EventForm.name, {'attr': {'class': 'form-control', 'placeholder': 'Nom de l evenement'}}) }}
+                        </div>
+
+                        <div class="form-group col-md-8">
+                            {{ form_label(EventForm.prix, 'Prix d evenement', {'label_attr': {'class': 'col-form-label'}}) }}
+                            {{ form_widget(EventForm.prix, {'attr': {'class': 'form-control', 'placeholder': 'Prix d evenement'}}) }}
+                        </div>
+
+                        <div class="form-group col-md-8">
+                            {{ form_label(EventForm.date, 'Date', {'label_attr': {'class': 'col-form-label'}}) }}
+                            {{ form_widget(EventForm.date, {'attr': {'class': 'form-control', 'placeholder': 'Date'}}) }}
+                        </div>
+                        <div class="form-group col-md-8">
+                            {{ form_label(EventForm.description, 'Description', {'label_attr': {'class': 'col-form-label'}}) }}
+                            {{ form_widget(EventForm.description, {'attr': {'class': 'form-control', 'placeholder': 'description'}}) }}
+                        </div>
+                        <div class="form-group col-md-8">
+                            {{ form_label(EventForm.thumbnail, 'Charger Thumbnail') }}
+                            {{ form_widget(EventForm.thumbnail, {
+                                'attr': {
+                                    'class': 'form-control-file',
+                                    'accept': 'image/*'
+                                }
+                            }) }}
+                        </div>
+                        <div class="col-md-6">
+                            <button type="submit" class="btn btn-primary">
+                                {{ is_edit ? 'Modifier' : 'Ajouter' }}
+                            </button>
+                        </div>
+                    </div>
+
+                    {{ form_end(EventForm) }}
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
+
