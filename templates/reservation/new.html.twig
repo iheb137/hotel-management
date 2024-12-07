@@ -6,57 +6,60 @@
     <section class="breadcrumb-outer">
         <div class="container">
             <div class="breadcrumb-content">
-                <h2>Reserver une chambre</h2>
-
+                <h2>{{ room.name }}</h2>
             </div>
         </div>
     </section>
-    {# Render the reservation form #}
-    {{ form_start(form) }}
 
-    <div>
-        {{ form_row(form.StartDate) }}
-        {{ form_row(form.EndDate) }}
-    </div>
+    <!-- Main Content -->
+    <main style="max-width: 1200px; margin: 20px auto; display: flex; gap: 20px;">
 
-    <div id="price" style="font-weight: bold; margin-top: 20px; font-size: 24px;">
-        Total Price: $<span id="total-price">0</span>
-    </div>
+        <!-- Room Details Section -->
+        <div style="flex: 2; background-color: #fff; border-radius: 5px; padding: 20px; box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);">
+            <div style="margin-bottom: 20px; position: relative; padding-top: 56.25%; overflow: hidden; border-radius: 8px;">
+                {% if room.Thumbnail %}
+                    <img src="{{ asset(room.Thumbnail) }}" alt="Room Thumbnail" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover;" />
+                {% else %}
+                    <img src="{{ asset('images/default-room.jpg') }}" alt="Default Room Thumbnail" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover;" />
+                {% endif %}
+            </div>
+            <h3 style="margin: 0 0 10px; font-size: 24px; font-weight: bold;">{{ room.name }}</h3>
+            <p style="color: #777; margin-bottom: 15px;">{{ room.description }}</p>
+            <ul style="list-style: none; padding: 0; margin: 0; font-size: 14px; color: #555;">
+                <li><i class="fa fa-tag"></i> ${{ room.prix }} / Night</li>
+                <li><i class="fa fa-bed"></i> {{ room.bedNbr }} Bedrooms</li>
+            </ul>
+        </div>
 
-    {# Manually add the submit button #}
-    <button type="submit" class="btn btn-primary mt-4">Submit</button>
+        <!-- Booking Sidebar -->
+        <aside style="flex: 1; background-color: #f8f9fa; padding: 20px; border-radius: 5px; box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);">
+            <h3 style="margin: 0 0 20px; font-size: 24px; color: #ff5722;">${{ room.prix }}/Night</h3>
 
-    {{ form_end(form) }}
+            {{ form_start(form) }}
 
-    {# Button to navigate back to create a new reservation for the same room #}
-    <a href="{{ path('app_reservation_new', { id: room.id }) }}" class="btn btn-secondary mt-2">
-        Back to Reservation
-    </a>
+            <div style="margin-bottom: 15px;">
+                {{ form_row(form.StartDate, {'attr': {'style': 'width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 5px;'}}) }}
+            </div>
 
-    {# JavaScript to calculate and update the price dynamically #}
-    <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            const startDateInput = document.getElementById('reservation_startDate');
-            const endDateInput = document.getElementById('reservation_endDate');
-            const totalPriceSpan = document.getElementById('total-price');
-            const pricePerNight = {{ room.prix }};  // Inject the price directly from PHP
+            <div style="margin-bottom: 15px;">
+                {{ form_row(form.EndDate, {'attr': {'style': 'width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 5px;'}}) }}
+            </div>
 
-            function updatePrice() {
-                const startDate = new Date(startDateInput.value);
-                const endDate = new Date(endDateInput.value);
+            <div id="price" style="font-weight: bold; margin-top: 20px; font-size: 20px; color: #333;">
+                Total Price: $<span id="total-price">0</span>
+            </div>
 
-                if (startDate && endDate && endDate > startDate) {
-                    const timeDifference = endDate - startDate;
-                    const days = Math.ceil(timeDifference / (1000 * 60 * 60 * 24));
-                    const totalPrice = days * pricePerNight;
-                    totalPriceSpan.innerText = totalPrice;
-                } else {
-                    totalPriceSpan.innerText = 0;
-                }
-            }
+            <!-- Button to manually calculate price -->
 
-            startDateInput.addEventListener('change', updatePrice);
-            endDateInput.addEventListener('change', updatePrice);
-        });
-    </script>
+
+            <button type="submit" style="background-color: #ff5722; color: white; padding: 10px; width: 100%; border: none; border-radius: 5px; font-size: 16px; margin-top: 20px;">
+                BOOK NOW
+            </button>
+
+            {{ form_end(form) }}
+        </aside>
+    </main>
+
+
+
 {% endblock %}
