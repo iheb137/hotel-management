@@ -18,12 +18,13 @@ class ReservationController extends AbstractController
 
 
 
-    #[Route('reservation/new/{id}', name: 'app_reservation_new', methods: ['GET', 'POST'])]
+    #[Route('client/reservation/new/{id}', name: 'app_reservation_new', methods: ['GET', 'POST'])]
     public function new(Room $room, Request $request, EntityManagerInterface $entityManager): Response
     {
         $reservation = new Reservation();
         $reservation->setUser($this->getUser());
         $reservation->setRoom($room);
+        $currentDate = new \DateTime();
 
         $form = $this->createForm(ReservationFormType::class, $reservation);
 
@@ -32,7 +33,10 @@ class ReservationController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $startDate = $reservation->getStartDate();
             $endDate = $reservation->getEndDate();
-
+            if ($startDate < $currentDate) {
+                $this->addFlash('error', 'Start date cannot be in the past.');
+                return $this->redirectToRoute('app_reservation_new', ['id' => $room->getId()]);
+            }
             if ($startDate > $endDate) {
                 $this->addFlash('error', 'Start date must be before end date.');
                 return $this->redirectToRoute('app_reservation_new', ['id' => $room->getId()]);
@@ -72,14 +76,11 @@ class ReservationController extends AbstractController
             'room' => $room
         ]);
     }
-    #[Route('/reservation', name: 'app_reservation_index', methods: ['GET'])]
+    #[Route('/client/reservation', name: 'app_reservation_index', methods: ['GET'])]
     public function index(ReservationRepository $reservationRepository): Response
     {
         $user = $this->getUser();
 
-        if (!$user) {
-            throw $this->createAccessDeniedException('You need to be logged in to view reservations.');
-        }
 
         $reservations = $reservationRepository->findBy(['user' => $user]);
 

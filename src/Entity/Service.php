@@ -27,6 +27,15 @@ class Service
     #[ORM\ManyToMany(targetEntity: Reservation::class, mappedBy: 'services')]
     private Collection $reservations;
 
+    #[ORM\Column(nullable: true)]
+    private ?int $count = null;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $thumbnail = null;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $description = null;
+
     public function __construct()
     {
         $this->reservations = new ArrayCollection();
@@ -84,6 +93,42 @@ class Service
         if ($this->reservations->removeElement($reservation)) {
             $reservation->removeService($this);
         }
+
+        return $this;
+    }
+
+    public function getCount(): ?int
+    {
+        return $this->count;
+    }
+
+    public function setCount(?int $count): static
+    {
+        $this->count = $count;
+
+        return $this;
+    }
+
+    public function getThumbnail(): ?string
+    {
+        return $this->thumbnail;
+    }
+
+    public function setThumbnail(?string $thumbnail): static
+    {
+        $this->thumbnail = $thumbnail;
+
+        return $this;
+    }
+
+    public function getDescription(): ?string
+    {
+        return $this->description;
+    }
+
+    public function setDescription(?string $description): static
+    {
+        $this->description = $description;
 
         return $this;
     }

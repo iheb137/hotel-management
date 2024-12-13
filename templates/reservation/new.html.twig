@@ -54,9 +54,35 @@
                 BOOK NOW
             </button>
 
+
+
+
+
+
             {{ form_end(form) }}
         </aside>
     </main>
+    <script>
+        function calculateTotalPrice() {
+            const startDate = new Date(document.getElementById('start-date').value);
+            const endDate = new Date(document.getElementById('end-date').value);
+            const roomPricePerNight = {{ room.prix }};
+
+            if (startDate && endDate && endDate > startDate) {
+                const timeDifference = endDate - startDate;
+                const days = Math.ceil(timeDifference / (1000 * 60 * 60 * 24));
+                const totalPrice = days * roomPricePerNight;
+
+                document.getElementById('total-price').innerText = `Total Price: $${totalPrice}`;
+            } else {
+                document.getElementById('total-price').innerText = 'Total Price: $0';
+            }
+        }
+
+        document.getElementById('start-date').addEventListener('change', calculateTotalPrice);
+        document.getElementById('end-date').addEventListener('change', calculateTotalPrice);
+    </script>
 
 
 {% endblock %}
+
