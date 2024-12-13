@@ -12,7 +12,7 @@ services:
       - dev
 
   www_gitlab:
-    build: php
+    build: docker/php
     container_name: www_docker_gitlab
     ports:
       - "8081:80"
