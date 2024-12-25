@@ -3,12 +3,13 @@
 namespace App\Form;
 
 use App\Entity\Event;
-use App\Entity\Reservation;
-use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
+use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Validator\Constraints\GreaterThanOrEqual;
 
 class EventFormType extends AbstractType
 {
@@ -17,10 +18,27 @@ class EventFormType extends AbstractType
         $builder
             ->add('name')
             ->add('prix')
-            ->add('date', null, [
+            ->add('date', DateType::class, [
                 'widget' => 'single_text',
+                'constraints' => [
+                    new GreaterThanOrEqual([
+                        'value' => 'today',
+                        'message' => 'The event date cannot be in the past.',
+                    ]),
+                ],
+                'attr' => [
+                    'min' => (new \DateTime())->format('Y-m-d'),
+                ],
             ])
-            ->add('description')
+            ->add('description', TextareaType::class, [
+                'attr' => [
+                    'class' => 'form-control',
+                    'placeholder' => 'Description de la chambre',
+                    'rows' => 4,
+                    'style' => 'resize: vertical;',
+                    'maxlength' => 255,
+                ],
+            ])
             ->add('thumbnail', FileType::class, [
                 'label' => 'Thumbnail (JPEG or PNG)',
                 'required' => false,
@@ -28,7 +46,6 @@ class EventFormType extends AbstractType
                 'attr' => ['class' => 'form-control-file'],
                 'data_class' => null
             ]);
-        ;
     }
 
     public function configureOptions(OptionsResolver $resolver): void

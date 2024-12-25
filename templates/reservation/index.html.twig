@@ -3,6 +3,18 @@
 {% block title %}Reservations{% endblock %}
 
 {% block body %}
+<style>
+
+    .rounded-box {
+        background-color: #f8f9fa;
+        border: 1px solid #ccc;
+        border-radius: 15px;
+        padding: 20px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+
+        margin-top: 20px;
+    }
+    </style>
     <section class="breadcrumb-outer">
         <div class="container">
             <div class="breadcrumb-content">
@@ -11,7 +23,7 @@
             </div>
         </div>
     </section>
-
+<div class="rounded-box" style="margin: 30px">
     <table class="table">
         <thead>
         <tr>
@@ -41,6 +53,7 @@
                 <td colspan="8">No reservations found.</td>
             </tr>
         {% endfor %}
+
         </tbody>
-    </table>
+    </table></div>
 {% endblock %}

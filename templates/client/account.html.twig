@@ -1,0 +1,151 @@
+{% extends 'baseClient.html.twig' %}
+
+{% block title %}Account{% endblock %}
+
+{% block body %}
+    <style>
+
+        .rounded-box {
+            background-color: #f8f9fa;
+            border: 1px solid #ccc;
+            border-radius: 15px;
+            padding: 20px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+
+            margin-top: 20px;
+        }
+
+        .rounded-box img {
+            border-radius: 50%;
+            object-fit: cover;
+            width: 80px;
+            height: 80px;
+            margin-right: 20px;
+        }
+
+        .info-row {
+            display: flex;
+            align-items: center;
+        }
+
+        .info-row p {
+            margin: 0 0 10px 0;
+        }
+    </style>
+
+    <section class="breadcrumb-outer">
+        <div class="container">
+            <div class="breadcrumb-content">
+                <h2>Account</h2>
+            </div>
+        </div>
+    </section>
+
+    {% for message in app.flashes('success') %}
+        <div class="alert alert-success">{{ message }}</div>
+    {% endfor %}
+
+    {% for message in app.flashes('error') %}
+        <div class="alert alert-danger">{{ message }}</div>
+    {% endfor %}
+
+    <div class="row">
+        <div class="col-lg-4 mb-3">
+            <div class="rounded-box" style="height: 350px;margin-left: 20px">
+                <h3>Current Information</h3>
+                <div class="info-row">
+                    <div class="mb-3">
+                        <img src="{{ asset(app.user.image) }}" alt="Profile Image" class="img-fluid" style="width:250px;height: 250px">
+                    </div>
+                    <div>
+                        <p><strong>Email:</strong> <br>{{ app.user.email }}</p>
+                        <p><strong>Nom:</strong> <br>{{ app.user.nom }}</p>
+                        <p><strong>Prenom:</strong> <br>{{ app.user.prenom }}</p>
+                        <p><strong>Téléphone:</strong><br> {{ app.user.telephone }}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="col-lg-8 mb-3">
+            <div class="rounded-box" style="height: 350px;margin-right: 20px; ">
+                <h3>Edit Information</h3>
+
+                {{ form_start(form) }}
+                <div class="row">
+                    <div class="col-lg-6 mb-3">
+                        {{ form_label(form.nom) }}
+                        {{ form_widget(form.nom, {'attr': {'class': 'form-control'}}) }}
+                    </div>
+
+                    <div class="col-lg-6 mb-3">
+                        {{ form_label(form.prenom) }}
+                        {{ form_widget(form.prenom, {'attr': {'class': 'form-control'}}) }}
+                    </div>
+
+                    <div class="col-lg-6 mb-3">
+                        {{ form_label(form.oldPassword) }}
+                        {{ form_widget(form.oldPassword, {'attr': {'class': 'form-control'}}) }}
+                    </div>
+
+                    <div class="col-lg-6 mb-3">
+                        {{ form_label(form.telephone) }}
+                        {{ form_widget(form.telephone, {'attr': {'class': 'form-control'}}) }}
+                    </div>
+
+                    <div class="col-lg-6 mb-3">
+                        {{ form_label(form.password) }}
+                        {{ form_widget(form.password, {'attr': {'class': 'form-control'}}) }}
+                    </div>
+
+                    <div class="col-lg-6 mb-3">
+                        {{ form_label(form.image) }}
+                        {{ form_widget(form.image, {'attr': {'class': 'form-control-file'}}) }}
+                    </div>
+
+                    <div class="col-lg-12 mb-3">
+                        <button type="submit" class="btn btn-primary" style="margin: 20px; background-color: #FF4500; border-color: #FF4500;">Update</button>
+                    </div>
+                </div>
+                {{ form_end(form) }}
+            </div>
+        </div>
+    </div>
+    <section>
+        <div class="rounded-box" style="margin-left: 20px; margin-right: 20px" >
+            <h3>Current Reservations</h3>
+        <table class="table">
+            <thead>
+            <tr>
+                <th>ID</th>
+                <th>Room</th>
+                <th>Check in</th>
+                <th>Check out</th>
+                <th>Total Price</th>
+                <th>Status</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for reservation in reservations %}
+                <tr>
+                    <td>{{ reservation.id }}</td>
+                    <td>{{ reservation.room.name }}</td>
+                    <td>{{ reservation.startDate|date('Y-m-d') }}</td>
+                    <td>{{ reservation.endDate|date('Y-m-d') }}</td>
+                    <td>{{ reservation.prix }}</td>
+                    <td>{{ reservation.statut }}</td>
+
+                </tr>
+            {% else %}
+                <tr>
+                    <td colspan="8">No reservations found.</td>
+                </tr>
+            {% endfor %}
+
+            </tbody>
+        </table>
+        </div>
+    </section>
+
+{% endblock %}

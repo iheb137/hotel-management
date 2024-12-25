@@ -1,4 +1,4 @@
-{% extends 'base.html.twig' %}
+{% extends 'baseClient.html.twig' %}
 
 {% block title %}New Reservation{% endblock %}
 
@@ -62,6 +62,85 @@
             {{ form_end(form) }}
         </aside>
     </main>
+
+    <section style="padding: 20px;  border-radius: 8px;margin: 50px">
+        {{ form_start(form2, {'attr': {'style': 'display: flex; align-items: center; gap: 15px;'}}) }}
+
+
+        <div style="display: flex; align-items: center;">
+            <div style="
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            font-weight: bold;
+            font-size: 18px;">
+                <img
+                        src="{{ asset(app.user.image) }}"
+                        alt="User Image"
+                        style="width: 50px; height: 50px; object-fit: cover; border-radius: 50%; margin-right: 20px;"
+                />
+            </div>
+        </div>
+
+
+        <div style="flex-grow: 1;">
+            {{ form_widget(form2.texte, {'attr': {'class': 'form-control', 'placeholder': 'Post a Review', 'style': '  border: none; outline: none; border-bottom: 1px solid gray;'}}) }}
+        </div>
+
+
+        <div>
+            <button type="submit" class="btn"
+                    style="
+                background-color: #FF4500;
+                color: white;
+                border: none;
+                border-radius: 20px;
+                padding: 8px 15px;
+                font-weight: bold;">
+                Post
+            </button>
+        </div>
+
+        {{ form_end(form2) }}
+    </section>
+    <section style="padding: 50px">
+        <h3>{{ nbrComments }} Reviews</h3><br><br>
+        <ul class="list-unstyled">
+            {% for comment in comments %}
+                <li style="display: flex; align-items: center; margin-bottom: 20px;">
+                    <img
+                            src="{{ asset(comment.user.image) }}"
+                            alt="User Image"
+                            style="width: 150px; height: 150px; object-fit: cover; border-radius: 50%; margin-right: 20px;"
+                    />
+                    <div>
+                        <strong>{{ comment.user.nom }}:</strong><br>
+                        <span>{{ comment.date|date('F j, Y \\a\\t g:i a') }}</span><br>
+                        <p>{{ comment.texte }}</p>
+
+                        {% if app.user and comment.user.id == app.user.id %}
+                            <form method="post" action="{{ path('app_comment_delete', { id: comment.id }) }}" style="display: inline;">
+                                <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ comment.id) }}">
+                                <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+                            </form>
+                        {% endif %}
+                    </div>
+                </li>
+            {% else %}
+                <li class="text-center">pas de commentaire</li>
+            {% endfor %}
+
+        </ul>
+
+    </section>
+
+
+
     <script>
         function calculateTotalPrice() {
             const startDate = new Date(document.getElementById('start-date').value);

@@ -6,9 +6,11 @@ use App\Entity\Room;
 use App\Form\RoomFormType;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\File\Exception\FileException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Knp\Component\Pager\PaginatorInterface;
 
 class RoomController extends AbstractController
 {
@@ -55,12 +57,18 @@ class RoomController extends AbstractController
         ]);
     }
     #[Route('/roomlist', name: 'app_room')]
-    public function index(EntityManagerInterface $entityManager): Response
+    public function index(Request $request, EntityManagerInterface $entityManager, PaginatorInterface $paginator): Response
     {
-        $rooms = $entityManager->getRepository(Room::class)->findAll();
+        $queryBuilder = $entityManager->getRepository(Room::class)->createQueryBuilder('room');
+
+        $pagination = $paginator->paginate(
+            $queryBuilder->getQuery(),
+            $request->query->getInt('page', 1),
+            6
+        );
 
         return $this->render('room/index.html.twig', [
-            'rooms' => $rooms,
+            'rooms' => $pagination,
             'controller_name' => 'RoomController',
         ]);
     }

@@ -13,6 +13,9 @@
             <th>Price</th>
             <th>Status</th>
             <th>Supprimer</th>
+            <th>Refuser</th>
+            <th>Accepter</th>
+
         </tr>
         </thead>
         <tbody>
@@ -31,12 +34,28 @@
                         <i class="fa fa-trash-alt"></i>
                     </a>
                 </td>
+                <td>
+                    <a href="{{ path('Refuser_reservation', {'id': reservation.id}) }}" class="btn btn-danger"
+                       onclick="return confirm('Êtes-vous sûr de vouloir refuser cette réservation ?');">
+                        <i class="fa fa-trash-alt"></i>
+                    </a>
+                </td>
+                <td>
+                    <a href="{{ path('Accept_reservation', {'id': reservation.id}) }}" class="btn btn-success"
+                       onclick="return confirm('Êtes-vous sûr de vouloir accepter cette réservation ?');">
+                        <i class="fa fa-trash-alt"></i>
+                    </a>
+                </td>
             </tr>
         {% else %}
             <tr>
                 <td colspan="8">No reservations found.</td>
             </tr>
         {% endfor %}
+
         </tbody>
     </table>
+    <div class="pagination text-center" style="display: flex; justify-content: center; align-items: center; margin-top: 20px; font-weight: bold; padding: 5px">
+        {{ knp_pagination_render(reservations) }}
+    </div>
 {% endblock %}

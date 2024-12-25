@@ -59,14 +59,5 @@ class Facture
         return $this->reservation;
     }
 
-    public function setReservation(Reservation $reservation): static
-    {
-        if ($reservation->getFacture() !== $this) {
-            $reservation->setFacture($this);
-        }
 
-        $this->reservation = $reservation;
-
-        return $this;
-    }
 }

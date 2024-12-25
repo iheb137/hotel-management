@@ -2,9 +2,14 @@
 
 namespace App\Controller;
 
+use App\Entity\Commentaire;
 use App\Entity\Event;
+use App\Form\CommentaireFormType;
 use App\Form\EventFormType;
+use App\Repository\CommentaireRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use Knp\Component\Pager\PaginatorInterface;
+use Symfony\Component\HttpFoundation\File\Exception\FileException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
@@ -12,13 +17,7 @@ use Symfony\Component\Routing\Attribute\Route;
 
 class EventController extends AbstractController
 {
-    #[Route('/event', name: 'app_event')]
-    public function index(): Response
-    {
-        return $this->render('event/index.html.twig', [
-            'controller_name' => 'EventController',
-        ]);
-    }
+
 
     #[Route('admin/event/ajout', name: 'ajout_event')]
     public function ajoutEvent(Request $request, EntityManagerInterface $entityManager): Response
@@ -90,10 +89,47 @@ class EventController extends AbstractController
     #[Route('admin/event/delete/{id}', name: 'delete_event')]
     public function deleteEvent(EntityManagerInterface $entityManager, Event $event): Response
     {
+
         $entityManager->remove($event);
         $entityManager->flush();
         $this->addFlash('success', 'Evenement supprimé avec succès.');
         return $this->redirectToRoute('all_event');
+    }
+    #[Route('/eventlist', name: 'event_list')]
+    public function eventList(EntityManagerInterface $entityManager, Request $request,PaginatorInterface $paginator): Response
+    {          $queryBuilder = $entityManager->getRepository(Event::class)->createQueryBuilder('event');
+
+        $pagination = $paginator->paginate(
+        $queryBuilder->getQuery(),
+        $request->query->getInt('page', 1),
+        6
+    );
+        return $this->render('event/index.html.twig', ['events' => $pagination, 'controller_name' => 'EventController']);
+    }
+    #[Route('/eventlist/detail/{id}', name:'app_detail_event')]
+    public function eventShow(EntityManagerInterface $entityManager, Request $request, Event $event, CommentaireRepository $commentaireRepository): Response
+    {
+        $commentaire = new Commentaire();
+        $comments=$commentaireRepository->findByEventId($event->getId());
+        $commentNumber=$commentaireRepository->countEventComments($event->getId());
+        $form = $this->createForm(CommentaireFormType::class, $commentaire);
+        $form->handleRequest($request);
+
+        if($form->isSubmitted() && $form->isValid()) {
+            $commentaire->setUser($this->getUser());
+            $commentaire->setEvent($event);
+            $commentaire->setDate(new \DateTime());
+            $commentaire->setRoom(null);
+            $entityManager->persist($commentaire);
+            $entityManager->flush();
+            return $this->redirectToRoute('app_detail_event', ['id' => $event->getId()]);
+
+        }
+
+        return $this->render('event/detail.html.twig', ['event' => $event,'form' => $form->createView(),'comments' => $comments,'nbrComments'=>$commentNumber
+
+
+        ]);
     }
 
 }

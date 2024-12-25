@@ -32,24 +32,19 @@ class RegistrationController extends AbstractController
             $user->setPassword($userPasswordHasher->hashPassword($user, $plainPassword));
 
             $user->setRoles(['ROLE_CLIENT']);
+            $user->setImage('/uploads/images/default.png');
 
             $entityManager->persist($user);
             $entityManager->flush();
 
-            //email
             $email = (new Email())
                 ->from('jammelihoussem5@gmail.com')
                 ->to($user->getEmail())
-                //->cc('cc@example.com')
-                //->bcc('bcc@example.com')
-                //->replyTo('fabien@example.com')
-                //->priority(Email::PRIORITY_HIGH)
-                ->subject('Inscription validéee!')
-                ->text('succée!')
-                ->html('<p>bien inscrit!</p>');
+                ->subject('Inscription validée!')
+                ->text('Succès!')
+                ->html('<p>Inscription réussie</p>');
 
             $mailer->send($email);
-            //email
 
             return $security->login($user, UserAuthenticator::class, 'main');
         }
