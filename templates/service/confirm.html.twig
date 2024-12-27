@@ -1,0 +1,133 @@
+{% extends 'baseClient.html.twig' %}
+{% block title %}Confirmation{% endblock %}
+
+{% block body %}
+    <section class="breadcrumb-outer">
+        <div class="container">
+            <div class="breadcrumb-content">
+                <h2>Confirmation</h2>
+            </div>
+        </div>
+    </section>
+
+
+
+    <section class="content">
+        <div class="container">
+            <div class="reservation-links text-center">
+                <h2 class="mar-bottom-60 text-capitalize">Make Your Reservation</h2>
+
+            </div>
+            <div class="booking">
+                <div class="row">
+                    <div class="col-lg-8">
+                        <div class="booking-content">
+                            <div class="booking-image">
+                                <img src="{{ asset(reservation.room.Thumbnail) }}" alt="image" />
+                                <div class="booking-title">
+                                    <div class="title-left">
+                                        <h3>{{ reservation.room.name }}</h3>
+
+                                    </div>
+                                    <div class="title-right pull-right">
+                                        <div class="title-price">
+                                            <h4 class="pad-top-15">
+                                                <a href="#">{{ reservation.room.prix }}<span>/Night</span></a>
+                                            </h4>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="booking-desc mar-top-50">
+
+                                <p>
+                                    {{ reservation.room.description }}
+                                </p>
+
+                            </div>
+                            <div class="extra-services mar-top-50" style="margin-TOP: 20px; background-color: lightgray; border-radius: 15px; padding: 10px">
+                                <p style="font-weight: bold; font-size: x-large">Select Additional Services</p>
+
+                                {{ form_start(form, { 'attr': { 'id': 'reservation-form' } }) }}
+                                <div class="checkbox-group" style="display: flex; flex-wrap: wrap;">
+                                    <div class="checkbox-column" style="flex: 1; min-width: 50px; margin-left: 20px;">
+                                        {% for service in form.services %}
+                                        <div class="checkbox-item" style="margin-bottom: 10px;">
+                                            {{ form_widget(service) }}
+                                            <label>{{ service.vars.label }}</label>
+                                        </div>
+                                        {% if loop.index is divisible by(4) %}
+                                    </div>
+                                    <div class="checkbox-column" style="flex: 1; min-width: 50px; margin-left: 20px;">
+                                        {% endif %}
+                                        {% endfor %}
+                                    </div>
+                                </div>
+                                {{ form_end(form) }}
+                            </div>
+
+                        </div>
+                    </div>
+                    <div class="col-lg-4">
+                        <div class="detail-sidebar">
+                            <div class="sidebar-reservation">
+                                <h3>Your reservation</h3>
+                                <div class="reservation-detail">
+                                    <div class="rd-top">
+                                        <div class="rd-box">
+                                            <label>Check in</label>
+                                            <p class="bold">{{ reservation.startdate|date('d') }}</p>
+                                            <p>{{ reservation.startdate|date('Y-m-d') }}<br />{{ reservation.startdate|date('l') }}</p>
+                                        </div>
+                                        <div class="rd-box">
+                                            <label>Check out</label>
+                                            <p class="bold">{{ reservation.enddate|date('d') }}</p>
+                                            <p>{{ reservation.enddate|date('Y-m-d') }}<br />{{ reservation.enddate|date('l') }}</p>
+                                        </div>
+                                    </div>
+                                    <div class="rd-top">
+                                        <div class="rd-box">
+                                            <p class="bold">{{ reservation.room.bedNbr }}</p>
+                                            <p>Bed Number</p>
+                                        </div>
+                                        <div class="rd-box">
+                                            <p class="bold">{% set difference = reservation.enddate|date('U') - reservation.startdate|date('U') %}
+                                                {{ difference / 86400 }}</p>
+                                            <p>Night</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <table class="reservation-table table">
+                                    <tbody>
+                                    <tr>
+                                        <td>Rate x {{ difference / 86400 }} Nights</td>
+                                        <td>{{ reservation.room.prix}} x {{ difference / 86400 }}</td>
+                                    </tr>
+
+                                    </tbody>
+                                    <tfoot>
+                                    <tr>
+                                        <td>Total</td>
+                                        <td>{{ reservation.prix}}</td>
+                                    </tr>
+                                    </tfoot>
+                                </table>
+                            </div>
+                            <div>
+                                <div>
+                                    <button type="submit" form="reservation-form" style="background-color: #ff5722; color: white; padding: 10px; width: 100%; border: none; border-radius: 5px; font-size: 16px; margin-top: 20px;">
+                                        Confirm Reservation
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+
+
+{% endblock %}

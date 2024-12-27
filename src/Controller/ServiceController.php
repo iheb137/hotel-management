@@ -12,13 +12,7 @@ use Symfony\Component\Routing\Attribute\Route;
 
 class ServiceController extends AbstractController
 {
-    #[Route('/service', name: 'app_service')]
-    public function index(Reservation $reservation,EntityManagerInterface $entityManager): Response
-    {
-        return $this->render('reservation/confirmation.html.twig', [
-            'controller_name' => 'ServiceController','reservation' => $reservation,
-        ]);
-    }
+
     #[Route('/service/ajout', name: 'app_service_ajout')]
     public function ajoutService(Request $request, EntityManagerInterface $entityManager): Response
     {

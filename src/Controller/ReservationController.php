@@ -5,9 +5,11 @@ namespace App\Controller;
 use App\Entity\Commentaire;
 use App\Entity\Reservation;
 use App\Entity\Room;
+use App\Entity\Service;
 use App\Form\CommentaireFormType;
 use App\Form\ReservationFormType;
 use App\Form\ReservationFormType2;
+use App\Form\ServiceFormType2Type;
 use App\Repository\CommentaireRepository;
 use App\Repository\ReservationRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -66,7 +68,7 @@ class ReservationController extends AbstractController
             $entityManager->persist($reservation);
             $entityManager->flush();
 
-            return $this->redirectToRoute('app_reservation_index', [], Response::HTTP_SEE_OTHER);
+            return $this->redirectToRoute('app_reservation_service', ['id'=>$reservation->getId()], Response::HTTP_SEE_OTHER);
         }
         if($form2->isSubmitted() && $form2->isValid()) {
             $commentaire->setUser($this->getUser());
@@ -87,14 +89,52 @@ class ReservationController extends AbstractController
             'nbrComments' => $commentNumber,
         ]);
     }
+
+    #[Route('/client/reservation/service', name: 'app_reservation_service', methods: ['GET', 'POST'])]
+    public function service(
+        Request $request,
+        EntityManagerInterface $entityManager,
+        ReservationRepository $reservationRepository
+    ): Response {
+        $reservation = $reservationRepository->find($request->get('id'));
+
+        if (!$reservation) {
+            throw $this->createNotFoundException('Reservation not found.');
+        }
+
+        $form = $this->createForm(ServiceFormType2Type::class, $reservation);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $basePrice = $reservation->getPrix();
+
+
+            foreach ($reservation->getServices() as $service) {
+                $basePrice += $service->getPrix();
+            }
+
+            $reservation->setPrix($basePrice);
+
+            $entityManager->flush();
+
+            $this->addFlash('success', 'Services and total price updated successfully.');
+
+            return $this->redirectToRoute('app_reservation_index', [
+                'id' => $reservation->getId(),
+            ]);
+        }
+
+        return $this->render('service/confirm.html.twig', [
+            'reservation' => $reservation,
+            'form' => $form->createView(),
+        ]);
+    }
+
     #[Route('/client/reservation', name: 'app_reservation_index', methods: ['GET'])]
     public function index(ReservationRepository $reservationRepository): Response
     {
         $user = $this->getUser();
-
-
         $reservations = $reservationRepository->findBy(['user' => $user]);
-
         return $this->render('reservation/index.html.twig', [
             'reservations' => $reservations,
         ]);
