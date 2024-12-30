@@ -1,6 +1,7 @@
-{% extends 'baseClient.html.twig' %}
+{% set base_template = app.user ? 'baseClient.html.twig' : 'baseUser.html.twig' %}
+{% extends base_template %}
 
-{% block title %}home{% endblock %}
+{% block title %}Home{% endblock %}
 
 {% block body %}
 
@@ -127,99 +128,36 @@
 <!-- Room Ends -->
 
 
-<!-- Services Starts -->
-<section class="services service-style-1 service-style-2">
-    <div class="container-fluid">
-        <div class="section-title">
-            <h2 class="mar-0">Explore <span>Services</span></h2>
-        </div>
-        <div class="service-outer">
-            <div class="row">
-                <div class="col-lg-3 col-md-6">
-                    <div class="service-item">
-                        <div class="service-image">
-                            <img src="images/feature1.jpg" alt="Image" />
+    <section class="services service-style-1 service-style-2">
+        <div class="container-fluid">
+            <div class="section-title">
+                <h2 class="mar-0">Explore <span>Services</span></h2>
+            </div>
+            <br><br><br><br>
+            <div class="service-outer">
+                <div class="row">
+                    {% for service in services %}
+                        <div class="col-lg-3 col-md-6" style="margin-bottom: 50px">
+                            <div class="service-item" style="width: 400px; height: 300px; position: relative;">
+                                <div class="service-image" style="position: absolute; inset: 0;">
+                                    <img
+                                            src="{{ asset(service.Thumbnail) }}"
+                                            alt="Image"
+                                            style="width: 100%; height: 100%; object-fit: cover;"
+                                    />
+                                </div>
+                                <div class="service-content" style="position: absolute; bottom: 0; left: 0; right: 0; padding: 20px; background: linear-gradient(to top, rgba(0,0,0,0.7), transparent);">
+                                    <h4 class="mar-0">
+                                        <a href="service-detail.html" class="white" style="text-decoration: none;">{{ service.nom }}</a>
+                                    </h4>
+                                </div>
+                            </div>
                         </div>
-                        <div class="service-content">
-                            <h4 class="mar-0"><a href="service-detail.html" class="white">Gym & Exercises</a></h4>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-3 col-md-6">
-                    <div class="service-item">
-                        <div class="service-image">
-                            <img src="images/feature2.jpg" alt="Image" />
-                        </div>
-                        <div class="service-content">
-                            <h4 class="mar-0"><a href="service-detail.html" class="white">Beach Sight</a></h4>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-3 col-md-6">
-                    <div class="service-item">
-                        <div class="service-image">
-                            <img src="images/feature5.jpg" alt="Image" />
-                        </div>
-                        <div class="service-content">
-                            <h4 class="mar-0"><a href="service-detail.html" class="white">Massage</a></h4>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-3 col-md-6">
-                    <div class="service-item">
-                        <div class="service-image">
-                            <img src="images/feature6.jpg" alt="Image" />
-                        </div>
-                        <div class="service-content">
-                            <h4 class="mar-0"><a href="service-detail.html" class="white">Swimming Pool</a></h4>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-3 col-md-6">
-                    <div class="service-item">
-                        <div class="service-image">
-                            <img src="images/feature7.jpg" alt="Image" />
-                        </div>
-                        <div class="service-content">
-                            <h4 class="mar-0"><a href="service-detail.html" class="white">Restaurant</a></h4>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-3 col-md-6">
-                    <div class="service-item">
-                        <div class="service-image">
-                            <img src="images/feature8.jpg" alt="Image" />
-                        </div>
-                        <div class="service-content">
-                            <h4 class="mar-0"><a href="service-detail.html" class="white">Futurethon</a></h4>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-3 col-md-6">
-                    <div class="service-item">
-                        <div class="service-image">
-                            <img src="images/feature5.jpg" alt="Image" />
-                        </div>
-                        <div class="service-content">
-                            <h4 class="mar-0"><a href="service-detail.html" class="white">Massage</a></h4>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-3 col-md-6">
-                    <div class="service-item">
-                        <div class="service-image">
-                            <img src="images/feature6.jpg" alt="Image" />
-                        </div>
-                        <div class="service-content">
-                            <h4 class="mar-0"><a href="service-detail.html" class="white">Swimming Pool</a></h4>
-                        </div>
-                    </div>
+                    {% endfor %}
                 </div>
             </div>
         </div>
-    </div>
-</section>
-<!-- Services Ends -->
+    </section>
 
 <!-- events starts -->
 <section class="events pad-bottom-70">
@@ -227,8 +165,7 @@
         <div class="section-title">
             <h2>Upcoming Events of <span>Hotux</span></h2>
             <p class="mar-bottom-30">
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec ex neque, sodales accumsan sapien et, auctor vulputate quam donec vitae consectetur
-                turpis
+                Discover an array of exciting events at our hotel, from live music nights and culinary tastings to wellness workshops and family-friendly activities. There's always something happening to make your stay unforgettable!
             </p>
         </div>
         <div class="list-content" style="padding: 10px;">

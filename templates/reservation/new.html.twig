@@ -3,6 +3,10 @@
 {% block title %}New Reservation{% endblock %}
 
 {% block body %}
+
+
+
+
     <section class="breadcrumb-outer">
         <div class="container">
             <div class="breadcrumb-content">
@@ -10,6 +14,24 @@
             </div>
         </div>
     </section>
+
+
+
+
+    <!-- Flash Messages -->
+    <!-- Flash Messages -->
+    <div style="font-weight: bold; font-size: large; text-decoration-color: #FF4500; margin-right: 500px; background-color: #EE4B2B; width: 100%; text-align: center;">
+        {% for label, messages in app.flashes %}
+            <div class="flash-message {{ label }}" style="display: inline-block; text-align: center; padding: 5px 20px; margin: 5px 0; border-radius: 5px;">
+                {% for message in messages %}
+                    <p style="margin: 0; padding: 5px; font-size: medium;">{{ message }}</p>
+                {% endfor %}
+            </div>
+        {% endfor %}
+    </div>
+
+
+
 
     <!-- Main Content -->
     <main style="max-width: 1200px; margin: 20px auto; display: flex; gap: 20px;">
@@ -45,10 +67,7 @@
                 {{ form_row(form.EndDate, {'attr': {'style': 'width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 5px;', 'id': 'end-date'}}) }}
             </div>
 
-            <!-- Total Price Display -->
-            <div id="total-price" style="font-weight: bold; font-size: 20px; color: #ff5722; margin-top: 20px;">
-                Total Price: $0
-            </div>
+            <br><br>
 
             <button type="submit" style="background-color: #ff5722; color: white; padding: 10px; width: 100%; border: none; border-radius: 5px; font-size: 16px; margin-top: 20px;">
                 BOOK NOW
@@ -123,7 +142,7 @@
                         <span>{{ comment.date|date('F j, Y \\a\\t g:i a') }}</span><br>
                         <p>{{ comment.texte }}</p>
 
-                        {% if app.user and comment.user.id == app.user.id %}
+                        {% if app.user and (comment.user.id == app.user.id or 'ROLE_ADMIN' in app.user.roles) %}
                             <form method="post" action="{{ path('app_comment_delete', { id: comment.id }) }}" style="display: inline;">
                                 <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ comment.id) }}">
                                 <button type="submit" class="btn btn-danger btn-sm">Delete</button>
@@ -141,27 +160,7 @@
 
 
 
-    <script>
-        function calculateTotalPrice() {
-            const startDate = new Date(document.getElementById('start-date').value);
-            const endDate = new Date(document.getElementById('end-date').value);
-            const roomPricePerNight = {{ room.prix }};
 
-            if (startDate && endDate && endDate > startDate) {
-                const timeDifference = endDate - startDate;
-                const days = Math.ceil(timeDifference / (1000 * 60 * 60 * 24));
-                const totalPrice = days * roomPricePerNight;
-
-                document.getElementById('total-price').innerText = `Total Price: $${totalPrice}`;
-            } else {
-                document.getElementById('total-price').innerText = 'Total Price: $0';
-            }
-        }
-
-        document.getElementById('start-date').addEventListener('change', calculateTotalPrice);
-        document.getElementById('end-date').addEventListener('change', calculateTotalPrice);
-    </script>
 
 
 {% endblock %}
-

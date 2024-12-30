@@ -1,5 +1,5 @@
-{% extends 'base.html.twig' %}
-
+{% set base_template = app.user ? 'baseClient.html.twig' : 'baseUser.html.twig' %}
+{% extends base_template %}
 {% block title %}New Reservation{% endblock %}
 
 {% block body %}
@@ -38,9 +38,12 @@
 
 
 
+    {% if app.user %}
 
 
     <section style="padding: 20px;  border-radius: 8px;margin: 50px">
+
+
         {{ form_start(form, {'attr': {'style': 'display: flex; align-items: center; gap: 15px;'}}) }}
 
 
@@ -56,6 +59,7 @@
             color: white;
             font-weight: bold;
             font-size: 18px;">
+
                 <img
                         src="{{ asset(app.user.image) }}"
                         alt="User Image"
@@ -84,9 +88,11 @@
         </div>
 
         {{ form_end(form) }}
+
     </section>
+    {% endif %}
     <section style="padding: 50px">
-        <h3>{{ nbrComments }} Reviews</h3><br><br>
+        <h3>{{ nbrComments }} Comments</h3><br><br>
         <ul class="list-unstyled">
             {% for comment in comments %}
                 <li style="display: flex; align-items: center; margin-bottom: 20px;">
@@ -100,7 +106,7 @@
                         <span>{{ comment.date|date('F j, Y \\a\\t g:i a') }}</span><br>
                         <p>{{ comment.texte }}</p>
 
-                        {% if app.user and comment.user.id == app.user.id %}
+                        {% if app.user and (comment.user.id == app.user.id or 'ROLE_ADMIN' in app.user.roles) %}
                             <form method="post" action="{{ path('app_comment_delete', { id: comment.id }) }}" style="display: inline;">
                                 <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ comment.id) }}">
                                 <button type="submit" class="btn btn-danger btn-sm">Delete</button>

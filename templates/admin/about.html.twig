@@ -1,0 +1,155 @@
+{% set base_template = app.user ? 'baseClient.html.twig' : 'baseUser.html.twig' %}
+{% extends base_template %}
+
+
+
+{% block body %}
+
+    <!-- breadcrumb Starts -->
+    <section class="breadcrumb-outer">
+        <div class="container">
+            <div class="breadcrumb-content">
+                <h2>About us 1</h2>
+                <nav aria-label="breadcrumb">
+                    <ul class="breadcrumb">
+                        <li class="breadcrumb-item"><a href="#">Home</a></li>
+                        <li class="breadcrumb-item active" aria-current="page">About us </li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </section>
+    <!-- breadcrumb Ends -->
+
+    <!-- about starts -->
+    <section class="about">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-6 col-md-12">
+                    <div class="about-para mar-top-50">
+                        <h4>Explore more about us</h4>
+                        <p>
+                            Welcome to Hotux, your home away from home. Nestled in the heart of Tunisia, our hotel combines comfort, elegance, and impeccable service to offer an unforgettable experience.
+                        </p>
+                        <p>
+                            At Hotux, we pride ourselves on delivering personalized hospitality. From our friendly staff to our attention to detail, everything we do is to ensure your stay is seamless and memorable.
+                        </p>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-6">
+                    <div class="about-us-image mar-top-50">
+                        <img src="{{ asset('assets/images/aboutus2.jpg') }}" alt="image" />
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-6">
+                    <div class="about-us-image">
+                        <img src="{{ asset('assets/images/aboutus1.jpg') }}" alt="image" />
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- about Ends -->
+
+    <!-- counter starts -->
+    <section class="about-counter pad-bottom-70">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-3 col-md-6 mar-bottom-30">
+                    <div class="counter-item">
+                        <p class="icon1"><i class="fa fa-suitcase"></i></p>
+                        <h3>{{ roomnbr }}</h3>
+                        <p>Room Types</p>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-6 mar-bottom-30">
+                    <div class="counter-item">
+                        <p class="icon1"><i class="fa fa-users"></i></p>
+                        <h3>{{ roomnbr }}</h3>
+                        <p>Users</p>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-6 mar-bottom-30">
+                    <div class="counter-item">
+                        <p class="icon1"><i class="fa fa-glass-cheers"></i></p>
+                        <h3>{{ eventnbr }}</h3>
+                        <p>events planned</p>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-6 mar-bottom-30">
+                    <div class="counter-item">
+                        <p class="icon1"><i class="fas fa-bell"></i></p>
+                        <h3 >{{ servicenbr }}</h3>
+                        <p>service provided</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- counter Ends -->
+
+    <!-- about team starts-->
+    <section class="about-team">
+        <div class="container">
+            <div class="section-title">
+                <h2>Explore <span>Team</span></h2>
+                <p>
+                    At Hotux, our dedicated team is here to ensure your stay is comfortable and memorable. From the front desk to housekeeping, each member is committed to providing exceptional service and making your experience unforgettable.
+                </p>
+            </div>
+            <div class="row">
+                {% for user in users %}
+                    <div class="col-lg-3 col-md-6">
+                        <div class="team-item">
+                            <div class="team-image">
+                                <img src="{{ asset(user.image) }}" alt="image" style="height: 350px"/>
+                            </div>
+                            <div class="team-content">
+                                <h4>{{ user.nom }} {{ user.prenom }}</h4><br>
+
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    </section>
+    <!-- about team Ends -->
+
+    <!-- Services Starts -->
+    <section class="services pad-bottom-70">
+        <div class="container">
+            <div class="section-title">
+                <h2>Explore <span>Services</span></h2>
+                <p>
+
+                    Hotux offers a range of services designed for your comfort, including a gourmet restaurant, relaxing spa treatments, and modern conference facilities. Whether you're here for business or leisure, we ensure a memorable and enjoyable stay.                </p>
+            </div>
+            <div class="service-outer">
+                <div class="row">
+                    {% for service in services %}
+                        <div class="col-lg-3 col-md-6" style="margin-bottom: 30px; padding-right: 15px;">
+                            <div class="service-item" style="width: 100%; height: 300px; position: relative;">
+                                <div class="service-image" style="position: absolute; inset: 0;">
+                                    <img
+                                            src="{{ asset(service.Thumbnail) }}"
+                                            alt="Image"
+                                            style="width: 100%; height: 100%; object-fit: cover;"
+                                    />
+                                </div>
+                                <div class="service-content" style="width: auto; bottom: 0; left: 0; right: 0; background: linear-gradient(to top, rgba(0,0,0,0.7), transparent);">
+                                    <h4 class="mar-0">
+                                        <a class="white" style="text-decoration: none;">{{ service.nom }}</a>
+                                    </h4>
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+
+        </div>
+    </section>
+    <!-- Services Ends -->
+
+{% endblock %}

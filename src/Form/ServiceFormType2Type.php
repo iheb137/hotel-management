@@ -2,6 +2,7 @@
 
 namespace App\Form;
 
+use App\Entity\Event;
 use App\Entity\Reservation;
 use App\Entity\Service;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
@@ -21,6 +22,13 @@ class ServiceFormType2Type extends AbstractType
                 'multiple' => true,
                 'expanded' => true,
             ])
+            ->add('events', EntityType::class, [
+                'class' => Event::class,
+                'choices' => $options['events'],
+                'choice_label' => 'name',
+                'multiple' => true,
+                'expanded' => true,
+            ]);
 ;
     }
 
@@ -28,6 +36,8 @@ class ServiceFormType2Type extends AbstractType
     {
         $resolver->setDefaults([
             'data_class' => Reservation::class,
+            'events' => [],
         ]);
     }
+
 }

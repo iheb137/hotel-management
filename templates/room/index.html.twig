@@ -1,5 +1,5 @@
-{% extends 'base.html.twig' %}
-
+{% set base_template = app.user ? 'baseClient.html.twig' : 'baseUser.html.twig' %}
+{% extends base_template %}
 {% block title %}Room List{% endblock %}
 
 {% block body %}

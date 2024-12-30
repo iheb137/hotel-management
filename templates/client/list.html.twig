@@ -1,0 +1,55 @@
+{% extends 'baseAdmin.html.twig' %}
+{% block body %}
+    <h3>User List</h3>
+
+
+    <table class="table">
+        <thead>
+        <tr>
+            <th>Image</th>
+            <th>ID</th>
+            <th>Nom</th>
+            <th>Prenom</th>
+            <th>Email</th>
+            <th>Phone</th>
+            <th>Delete</th>
+
+        </tr>
+        </thead>
+        <tbody>
+        {% for user in users %}
+            <tr>
+                <td>
+                    {% if user.image %}
+                        <img src="{{ asset(user.image) }}" alt="Thumbnail" class="img-thumbnail" style="width: 60px; height: 60px; object-fit: cover;">
+                    {% else %}
+                        <span class="text-muted">No Image</span>
+                    {% endif %}
+                </td>
+                <td>{{ user.id }}</td>
+                <td>{{ user.nom }}</td>
+                <td>{{ user.prenom }}</td>
+                <td>{{ user.email }}</td>
+                <td>{{ user.telephone }}</td>
+                <td>
+                    <a href="{{ path('admin_client_delete', {'id': user.id}) }}" class="btn btn-danger"
+                       onclick="return confirm('Êtes-vous sûr de vouloir supprimer cette compte ?');">
+                        <i class="fas fa-trash"></i>
+                    </a>
+                </td>
+
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="8">No users found.</td>
+            </tr>
+        {% endfor %}
+
+        </tbody>
+    </table>
+    <div class="pagination text-center" style="display: flex; justify-content: center; align-items: center; margin-top: 20px; font-weight: bold; padding: 5px">
+        {{ knp_pagination_render(users) }}
+    </div>
+
+
+{% endblock %}

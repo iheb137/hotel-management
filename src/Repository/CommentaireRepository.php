@@ -55,7 +55,22 @@ class CommentaireRepository extends ServiceEntityRepository
             ->getQuery()
             ->getSingleScalarResult();
     }
-
+    public function countRoomsComments(): int
+{
+    return $this->createQueryBuilder('c')
+        ->select('COUNT(c.id)')
+        ->where('c.event IS NULL')
+        ->getQuery()
+        ->getSingleScalarResult();
+}
+    public function countEventsComments(): int
+    {
+        return $this->createQueryBuilder('c')
+            ->select('COUNT(c.id)')
+            ->where('c.room IS NULL')
+            ->getQuery()
+            ->getSingleScalarResult();
+    }
 //    /**
 //     * @return Commentaire[] Returns an array of Commentaire objects
 //     */

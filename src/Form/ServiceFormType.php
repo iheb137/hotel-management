@@ -7,6 +7,7 @@ use App\Entity\Service;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
+use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
@@ -17,7 +18,15 @@ class ServiceFormType extends AbstractType
         $builder
             ->add('nom')
             ->add('prix')
-            ->add('description')
+            ->add('description', TextareaType::class, [
+                'attr' => [
+                    'class' => 'form-control',
+                    'placeholder' => 'Description du service',
+                    'rows' => 4,
+                    'style' => 'resize: vertical;',
+                    'maxlength' => 255,
+                ],
+            ])
             ->add('thumbnail', FileType::class, [
                 'label' => 'Thumbnail (JPEG or PNG)',
                 'required' => false,

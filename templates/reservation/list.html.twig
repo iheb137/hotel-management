@@ -1,61 +1,74 @@
 {% extends 'baseAdmin.html.twig' %}
+
 {% block body %}
+    <div class="container my-5">
+        <h3>Liste des Reservations</h3>
 
+        <form method="get" class="mb-3">
+            <label for="statut">Filtrer par statut:</label>
+            <select name="statut" id="statut" class="form-select" style="width: 400px">
+                <option value="">Tous les statuts</option>
+                <option value="accepted" {% if statut == 'accepted' %}selected{% endif %}>accepted</option>
+                <option value="pending" {% if statut == 'pending' %}selected{% endif %}>pending</option>
+                <option value="refused" {% if statut == 'refused' %}selected{% endif %}>refused</option>
+            </select>
+            <button type="submit" class="btn btn-primary mt-2" style="margin: 15px; background-color: #FF4500; border-color: #FF4500;">Filtrer</button>
+        </form>
 
-    <table class="table">
-        <thead>
-        <tr>
-            <th>ID</th>
-            <th>Room</th>
-            <th>User</th>
-            <th>Start Date</th>
-            <th>End Date</th>
-            <th>Price</th>
-            <th>Status</th>
-            <th>Supprimer</th>
-            <th>Refuser</th>
-            <th>Accepter</th>
-
-        </tr>
-        </thead>
-        <tbody>
-        {% for reservation in reservations %}
+        <table class="table">
+            <thead>
             <tr>
-                <td>{{ reservation.id }}</td>
-                <td>{{ reservation.room.name }}</td>
-                <td>{{ reservation.user.email }}</td>
-                <td>{{ reservation.startDate|date('Y-m-d') }}</td>
-                <td>{{ reservation.endDate|date('Y-m-d') }}</td>
-                <td>{{ reservation.prix }}</td>
-                <td>{{ reservation.statut }}</td>
-                <td>
-                    <a href="{{ path('delete_reservation', {'id': reservation.id}) }}" class="btn btn-danger"
-                       onclick="return confirm('Êtes-vous sûr de vouloir supprimer cette réservation ?');">
-                        <i class="fa fa-trash-alt"></i>
-                    </a>
-                </td>
-                <td>
-                    <a href="{{ path('Refuser_reservation', {'id': reservation.id}) }}" class="btn btn-danger"
-                       onclick="return confirm('Êtes-vous sûr de vouloir refuser cette réservation ?');">
-                        <i class="fa fa-trash-alt"></i>
-                    </a>
-                </td>
-                <td>
-                    <a href="{{ path('Accept_reservation', {'id': reservation.id}) }}" class="btn btn-success"
-                       onclick="return confirm('Êtes-vous sûr de vouloir accepter cette réservation ?');">
-                        <i class="fa fa-trash-alt"></i>
-                    </a>
-                </td>
+                <th>ID</th>
+                <th>Room</th>
+                <th>User</th>
+                <th>Start Date</th>
+                <th>End Date</th>
+                <th>Price</th>
+                <th>Status</th>
+                <th>Supprimer</th>
+                <th>Refuser</th>
+                <th>Accepter</th>
             </tr>
-        {% else %}
-            <tr>
-                <td colspan="8">No reservations found.</td>
-            </tr>
-        {% endfor %}
+            </thead>
+            <tbody>
+            {% for reservation in reservations %}
+                <tr>
+                    <td>{{ reservation.id }}</td>
+                    <td>{{ reservation.room.name }}</td>
+                    <td>{{ reservation.user.email }}</td>
+                    <td>{{ reservation.startDate|date('Y-m-d') }}</td>
+                    <td>{{ reservation.endDate|date('Y-m-d') }}</td>
+                    <td>{{ reservation.prix }}</td>
+                    <td>{{ reservation.statut }}</td>
+                    <td>
+                        <a href="{{ path('delete_reservation', {'id': reservation.id}) }}" class="btn btn-danger"
+                           onclick="return confirm('Êtes-vous sûr de vouloir supprimer cette réservation ?');">
+                            <i class="fa fa-trash-alt"></i>
+                        </a>
+                    </td>
+                    <td>
+                        <a href="{{ path('Refuser_reservation', {'id': reservation.id}) }}" class="btn btn-danger"
+                           onclick="return confirm('Êtes-vous sûr de vouloir refuser cette réservation ?');">
+                            <i class="fas fa-ban"></i>
+                        </a>
+                    </td>
+                    <td>
+                        <a href="{{ path('Accept_reservation', {'id': reservation.id}) }}" class="btn btn-success"
+                           onclick="return confirm('Êtes-vous sûr de vouloir accepter cette réservation ?');">
+                            <i class="fas fa-check"></i>
+                        </a>
+                    </td>
+                </tr>
+            {% else %}
+                <tr>
+                    <td colspan="10">Aucune réservation trouvée.</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
 
-        </tbody>
-    </table>
-    <div class="pagination text-center" style="display: flex; justify-content: center; align-items: center; margin-top: 20px; font-weight: bold; padding: 5px">
-        {{ knp_pagination_render(reservations) }}
+        <div class="pagination text-center" style="display: flex; justify-content: center; align-items: center; margin-top: 20px; font-weight: bold; padding: 5px">
+            {{ knp_pagination_render(reservations) }}
+        </div>
     </div>
 {% endblock %}

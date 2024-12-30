@@ -4,6 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
 
+    <title>Room List 1 | Hotux</title>
     <!-- Favicon -->
     <link rel="shortcut icon" type="image/x-icon" href="images/favicon.png')}}" />
     <!-- Bootstrap core CSS -->
@@ -20,12 +21,43 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.min.css" />
 </head>
 <body>
+<!-- Preloader -->
 <div id="preloader">
     <div id="status"></div>
 </div>
+<!-- Preloader Ends -->
 
+<!-- header start -->
 <header class="main_header_area">
+    <div class="header-content">
+        <div class="container">
+            <div class="links links-left">
+                <ul>
+                    <li>
+                        <a href="#"><i class="fa fa-envelope" aria-hidden="true"></i> info@hotux.com.np</a>
+                    </li>
+                    <li>
+                        <a href="#"><i class="fa fa-phone" aria-hidden="true"></i> 977-222-333-444</a>
+                    </li>
 
+                </ul>
+            </div>
+            <div class="links links-right pull-right">
+                <ul>
+                    <li>
+                        <a href="{{ path('app_login') }}"  data-bs-toggle="modal" data-bs-target="#login"><i class="fa fa-user" aria-hidden="true"></i> Login</a>
+                    </li>
+                    <li>
+                        <a href="{{ path('app_register') }}" data-bs-toggle="modal" data-bs-target="#register"><i class="fa fa-pen" aria-hidden="true"></i> Register</a>
+                    </li>
+                    <li>
+
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <!-- Navigation Bar -->
     <div class="header_menu affix-top">
         <div class="container">
             <nav class="navbar navbar-default" >
@@ -38,7 +70,7 @@
                 <div  id="bs-example-navbar-collapse-1" style="margin-left: 400px">
                     <ul class="nav navbar-nav" id="responsive-menu" >
                         <li class="dropdown submenu">
-                            <a href="{{ path('app_home') }}" 
+                            <a href="{{ path('app_home') }}"
                             >Home</a>
 
                         </li>
@@ -56,23 +88,9 @@
                             >About us</a>
 
                         </li>
-                        <li class="submenu dropdown">
-                            <a class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"
-                            >Profile<i class="fa fa-angle-down" aria-hidden="true"></i
-                                ></a>
-                            <ul class="dropdown-menu">
-                                <li><a href="{{ path('account_edit') }}">Manage Account</a></li>
-                                <li><a href="{{ path('app_logout') }}">Log Out</a></li>
 
-                            </ul>
-                        </li>
 
-                        {%if 'ROLE_ADMIN' in app.user.roles %}
-                        <li class="submenu dropdown">
-                            <a href="{{ path('app_dashboard') }}"
-                            >dashboard</a>
-                        {% endif %}
-                        </li>
+
 
 
                     </ul>
@@ -84,7 +102,6 @@
         </div>
         <!-- /.container-fluid -->
     </div>
-    <!-- Navigation Bar Ends -->
 </header>
 <!-- header Ends -->
 
@@ -256,16 +273,53 @@
 </div>
 
 <div class="modal fade" id="register" role="dialog">
-  <a href=""></a>
+    <div class="modal-dialog">
+        <div class="modal-content login-content">
+            <div class="login-image">
+                <img src="{{asset('assets/images/logo-black.png')}}" alt="image" />
+            </div>
+            <h3>Awesome! Create a Hotux Account</h3>
+            <form>
+                <div class="form-group">
+                    <input type="text" placeholder="Enter username" />
+                </div>
+                <div class="form-group">
+                    <input type="email" placeholder="Enter email address" />
+                </div>
+                <div class="form-group">
+                    <input type="password" placeholder="Enter password" />
+                </div>
+                <div class="form-group">
+                    <input type="password" placeholder="Confirm password" />
+                </div>
+            </form>
+            <div class="form-btn">
+                <a href="#" class="btn btn-orange">SIGN UP</a>
+            </div>
+            <ul class="social-links">
+                <li>
+                    <a href="#"><i class="fab fa-facebook" aria-hidden="true"></i></a>
+                </li>
+                <li>
+                    <a href="#"><i class="fab fa-twitter" aria-hidden="true"></i></a>
+                </li>
+                <li>
+                    <a href="#"><i class="fab fa-instagram" aria-hidden="true"></i></a>
+                </li>
+                <li>
+                    <a href="#"><i class="fab fa-linkedin" aria-hidden="true"></i></a>
+                </li>
+            </ul>
+        </div>
+    </div>
 </div>
 
-<!-- *Scripts* -->
 <script src="https://cdn.jsdelivr.net/npm/feather-icons"></script>
 
 <script src="{{ asset('assets/js/jquery-3.3.1.min.js')}}"></script>
 <script src="{{ asset('assets/js/bootstrap.min.js')}}"></script>
 <script src="{{ asset('assets/js/plugin.js')}}"></script>
 <script src="{{ asset('assets/js/main.js')}}"></script>
-<script src="{{ asset('assets/js/custom-nav.js')}}"></script>
+<script src="{{ asset('assets/js/custom-nav.js')}}"></script>pt>
 </body>
 </html>

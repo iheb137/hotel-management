@@ -1,4 +1,5 @@
 {% extends 'baseClient.html.twig' %}
+
 {% block title %}Confirmation{% endblock %}
 
 {% block body %}
@@ -10,24 +11,20 @@
         </div>
     </section>
 
-
-
     <section class="content">
         <div class="container">
             <div class="reservation-links text-center">
                 <h2 class="mar-bottom-60 text-capitalize">Make Your Reservation</h2>
-
             </div>
             <div class="booking">
                 <div class="row">
                     <div class="col-lg-8">
                         <div class="booking-content">
                             <div class="booking-image">
-                                <img src="{{ asset(reservation.room.Thumbnail) }}" alt="image" />
+                                <img src="{{ asset(reservation.room.Thumbnail) }}" alt="image" style="width: 100%; height: 100%; object-fit: cover;"/>
                                 <div class="booking-title">
                                     <div class="title-left">
                                         <h3>{{ reservation.room.name }}</h3>
-
                                     </div>
                                     <div class="title-right pull-right">
                                         <div class="title-price">
@@ -39,36 +36,60 @@
                                 </div>
                             </div>
                             <div class="booking-desc mar-top-50">
-
                                 <p>
                                     {{ reservation.room.description }}
                                 </p>
-
                             </div>
-                            <div class="extra-services mar-top-50" style="margin-TOP: 20px; background-color: lightgray; border-radius: 15px; padding: 10px">
-                                <p style="font-weight: bold; font-size: x-large">Select Additional Services</p>
 
-                                {{ form_start(form, { 'attr': { 'id': 'reservation-form' } }) }}
-                                <div class="checkbox-group" style="display: flex; flex-wrap: wrap;">
-                                    <div class="checkbox-column" style="flex: 1; min-width: 50px; margin-left: 20px;">
-                                        {% for service in form.services %}
-                                        <div class="checkbox-item" style="margin-bottom: 10px;">
-                                            {{ form_widget(service) }}
-                                            <label>{{ service.vars.label }}</label>
+                            <div style="margin-top:20px">
+                                <h3>Additional Services</h3>
+                                <div class="extra-services mar-top-50" style="margin-TOP: 20px; background-color: #f4f6f6; padding: 30px">
+                                    {{ form_start(form, { 'attr': { 'id': 'reservation-form' } }) }}
+                                    <div class="checkbox-group" style="display: flex; flex-wrap: wrap;">
+                                        <div class="checkbox-column" style="flex: 1; min-width: 50px; margin-left: 20px;">
+                                            {% for service in form.services %}
+                                            <div class="checkbox-item" style="margin-bottom: 10px;">
+                                                {{ form_widget(service) }}
+                                                <label>{{ service.vars.label }}</label>
+                                            </div>
+                                            {% if loop.index is divisible by(3) %}
                                         </div>
-                                        {% if loop.index is divisible by(4) %}
+                                        <div class="checkbox-column" style="flex: 1; min-width: 50px; margin-left: 20px;">
+                                            {% endif %}
+                                            {% endfor %}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <br><br>
+                            <div>
+                                <h3>Events available during your stay</h3>
+                                <div class="extra-services mar-top-50" style="margin-TOP: 20px; background-color: #f4f6f6; padding: 30px">
+                                    <div class="checkbox-column" style="flex: 1; min-width: 50px; margin-left: 20px;">
+                                       {%if form.events is empty %}
+                                        <h4>There are no events available during your visit</h4>
+                                        {% else %}
+                                        {% for event in form.events %}
+                                                <div class="checkbox-item" style="margin-bottom: 10px;">
+                                                    {{ form_widget(event) }}
+                                                    <label>{{ event.vars.label }}</label>
+                                                </div>
+                                        {% if loop.index is divisible by(3) %}
                                     </div>
                                     <div class="checkbox-column" style="flex: 1; min-width: 50px; margin-left: 20px;">
                                         {% endif %}
                                         {% endfor %}
+                                        {% endif %}
                                     </div>
                                 </div>
                                 {{ form_end(form) }}
-                            </div>
 
+                            </div>
                         </div>
                     </div>
-                    <div class="col-lg-4">
+<div>
+            <div class="col-lg-4">
                         <div class="detail-sidebar">
                             <div class="sidebar-reservation">
                                 <h3>Your reservation</h3>
@@ -103,7 +124,6 @@
                                         <td>Rate x {{ difference / 86400 }} Nights</td>
                                         <td>{{ reservation.room.prix}} x {{ difference / 86400 }}</td>
                                     </tr>
-
                                     </tbody>
                                     <tfoot>
                                     <tr>
@@ -125,9 +145,7 @@
                 </div>
             </div>
         </div>
+        </div>
     </section>
-
-
-
 
 {% endblock %}

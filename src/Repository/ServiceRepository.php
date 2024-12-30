@@ -15,6 +15,32 @@ class ServiceRepository extends ServiceEntityRepository
     {
         parent::__construct($registry, Service::class);
     }
+    public function countServices():int
+    {
+        return $this->createQueryBuilder('s')
+            ->select('COUNT(s.id)')
+            ->getQuery()
+            ->getSingleScalarResult();
+    }
+    public function stat()
+    {
+        return $this->createQueryBuilder('s')
+            ->select(
+                's.id AS serviceId',
+                's.nom',
+                's.thumbnail',
+                'COUNT(r.id) AS reservationCount',
+                'COALESCE(COUNT(r.id) * s.prix, 0) AS totalRevenue'
+            )
+            ->leftJoin('s.reservations', 'r')
+            ->where('r.statut = :acceptedStatus')
+            ->setParameter('acceptedStatus', 'accepted')
+            ->groupBy('s.id', 's.prix', 's.thumbnail')
+            ->orderBy('totalRevenue', 'DESC')
+            ->getQuery()
+            ->getResult();
+    }
+
 
     //    /**
     //     * @return Service[] Returns an array of Service objects

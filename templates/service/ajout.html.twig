@@ -1,45 +1,74 @@
 {% extends 'baseAdmin.html.twig' %}
 
-{% block title %}Ajouter un Service{% endblock %}
+{% block title %}Gestion des services Service{% endblock %}
 
 {% block body %}
-    <h1>Ajouter un Service</h1>
+    <div class="container my-5">
+        <h3>{{ is_edit ? 'Modifier un service' : 'Ajouter un service' }}</h3>
 
-    {% for message in app.flashes('success') %}
-        <div class="alert alert-success">
-            {{ message }}
+        <div class="card">
+            <div class="card-body">
+                <div class="col-md-10">
+                    {{ form_start(ServiceForm, {
+                        'attr': {
+                            'class': 'form'
+                        },
+                        'action': is_edit ? path('edit_service', {'id': serviceId}) : path('ajout_service'),
+                        'method': 'post'
+                    }) }}
+
+                    <div class="form-group col-md-8">
+                        {{ form_label(ServiceForm.nom, 'Nom de la chambre', {'label_attr': {'class': 'col-form-label'}}) }}
+                        {{ form_widget(ServiceForm.nom, {
+                            'attr': {
+                                'class': 'form-control',
+                                'placeholder': 'Nom de la chambre'
+                            }
+                        }) }}
+                    </div>
+
+
+
+
+                    <div class="form-group col-md-8">
+                        {{ form_label(ServiceForm.prix, 'Prix du Service', {'label_attr': {'class': 'col-form-label'}}) }}
+                        {{ form_widget(ServiceForm.prix, {
+                            'attr': {
+                                'class': 'form-control',
+                                'placeholder': 'Prix de la chambre'
+                            }
+                        }) }}
+                    </div>
+
+                    <div class="form-group col-md-8">
+                        {{ form_label(ServiceForm.description, 'Description', {'label_attr': {'class': 'col-form-label'}}) }}
+                        {{ form_widget(ServiceForm.description, {
+                            'attr': {
+                                'class': 'form-control',
+                                'placeholder': 'Description de la chambre'
+                            }
+                        }) }}
+                    </div>
+
+                    <div class="form-group col-md-8">
+                        {{ form_label(ServiceForm.thumbnail, 'Charger Thumbnail') }}
+                        {{ form_widget(ServiceForm.thumbnail, {
+                            'attr': {
+                                'class': 'form-control-file',
+                                'accept': 'image/*'
+                            }
+                        }) }}
+                    </div>
+
+                    <div class="col-md-6">
+                        <button type="submit" class="btn btn-primary mt-3">
+                            {{ is_edit ? 'Modifier' : 'Ajouter' }}
+                        </button>
+                    </div>
+
+                    {{ form_end(ServiceForm) }}
+                </div>
+            </div>
         </div>
-    {% endfor %}
-
-    {% for message in app.flashes('error') %}
-        <div class="alert alert-danger">
-            {{ message }}
-        </div>
-    {% endfor %}
-
-    {{ form_start(form, {'attr': {'enctype': 'multipart/form-data'}}) }}
-    <div class="form-group">
-        {{ form_label(form.nom) }}
-        {{ form_widget(form.nom, {'attr': {'class': 'form-control'}}) }}
-        {{ form_errors(form.nom) }}
     </div>
-
-    <div class="form-group">
-        {{ form_label(form.prix) }}
-        {{ form_widget(form.prix, {'attr': {'class': 'form-control'}}) }}
-        {{ form_errors(form.prix) }}
-    </div>
-    <div class="form-group">
-        {{ form_label(form.description) }}
-        {{ form_widget(form.description, {'attr': {'class': 'form-control'}}) }}
-        {{ form_errors(form.description) }}
-    </div>
-    <div class="form-group">
-        {{ form_label(form.thumbnail) }}
-        {{ form_widget(form.thumbnail, {'attr': {'class': 'form-control-file'}}) }}
-        {{ form_errors(form.thumbnail) }}
-    </div>
-
-    <button type="submit" class="btn btn-primary">Ajouter</button>
-    {{ form_end(form) }}
 {% endblock %}

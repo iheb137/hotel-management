@@ -15,6 +15,50 @@ class EventRepository extends ServiceEntityRepository
     {
         parent::__construct($registry, Event::class);
     }
+    public function findEventsInRange(\DateTimeInterface $startDate, \DateTimeInterface $endDate): array
+    {
+        return $this->createQueryBuilder('e')
+            ->where('e.date >= :startDate')
+            ->andWhere('e.date <= :endDate')
+            ->setParameter('startDate', $startDate)
+            ->setParameter('endDate', $endDate)
+            ->getQuery()
+            ->getResult();
+    }
+public function countEventsafterdate(\DateTimeInterface $date): int
+{
+    return $this->createQueryBuilder('e')
+        ->select('count(e.id)')
+        ->where('e.date >= :Date')
+        ->setParameter('Date', $date)
+        ->getQuery()
+        ->getSingleScalarResult();
+}
+public function countEvent():int
+{
+    return $this->createQueryBuilder('e')
+        ->select('count(e.id)')
+        ->getQuery()
+        ->getSingleScalarResult();
+}
+public function stat()
+{
+    return $this->createQueryBuilder('e')
+        ->select(
+            'e.id AS eventId',
+            'e.name',
+            'e.thumbnail',
+            'COALESCE(COUNT(r.id) * e.prix, 0) AS totalRevenue'
+        )
+        ->leftJoin('e.reservations', 'r')
+        ->where('r.statut = :acceptedStatus')
+        ->setParameter('acceptedStatus', 'accepted')
+        ->groupBy('e.id', 'e.prix', 'e.thumbnail')
+        ->orderBy('totalRevenue', 'DESC')
+        ->getQuery()
+        ->getResult();
+}
+
 
     //    /**
     //     * @return Event[] Returns an array of Event objects

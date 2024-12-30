@@ -11,6 +11,7 @@ use App\Form\ReservationFormType;
 use App\Form\ReservationFormType2;
 use App\Form\ServiceFormType2Type;
 use App\Repository\CommentaireRepository;
+use App\Repository\EventRepository;
 use App\Repository\ReservationRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Knp\Component\Pager\PaginatorInterface;
@@ -25,13 +26,17 @@ class ReservationController extends AbstractController
 
 
     #[Route('client/reservation/new/{id}', name: 'app_reservation_new', methods: ['GET', 'POST'])]
-    public function new(Room $room, Request $request, EntityManagerInterface $entityManager, CommentaireRepository $commentaireRepository): Response
-    {
+    public function new(
+        Room $room,
+        Request $request,
+        EntityManagerInterface $entityManager,
+        CommentaireRepository $commentaireRepository
+    ): Response {
         $reservation = new Reservation();
         $commentaire = new Commentaire();
         $reservation->setUser($this->getUser());
-        $comments=$commentaireRepository->findByRoomId($room->getId());
-        $commentNumber=$commentaireRepository->countRoomComments($room->getId());
+        $comments = $commentaireRepository->findByRoomId($room->getId());
+        $commentNumber = $commentaireRepository->countRoomComments($room->getId());
         $reservation->setRoom($room);
         $currentDate = new \DateTime();
 
@@ -43,10 +48,12 @@ class ReservationController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $startDate = $reservation->getStartDate();
             $endDate = $reservation->getEndDate();
+
             if ($startDate < $currentDate) {
                 $this->addFlash('error', 'Start date cannot be in the past.');
                 return $this->redirectToRoute('app_reservation_new', ['id' => $room->getId()]);
             }
+
             if ($startDate > $endDate) {
                 $this->addFlash('error', 'Start date must be before end date.');
                 return $this->redirectToRoute('app_reservation_new', ['id' => $room->getId()]);
@@ -64,22 +71,25 @@ class ReservationController extends AbstractController
 
             $reservation->setStatut('pending');
 
-
             $entityManager->persist($reservation);
             $entityManager->flush();
 
-            return $this->redirectToRoute('app_reservation_service', ['id'=>$reservation->getId()], Response::HTTP_SEE_OTHER);
+            $this->addFlash('success', 'Reservation successfully created!');
+            return $this->redirectToRoute('app_reservation_service', ['id' => $reservation->getId()], Response::HTTP_SEE_OTHER);
         }
-        if($form2->isSubmitted() && $form2->isValid()) {
+
+        if ($form2->isSubmitted() && $form2->isValid()) {
             $commentaire->setUser($this->getUser());
             $commentaire->setRoom($room);
             $commentaire->setDate(new \DateTime());
             $commentaire->setEvent(null);
             $entityManager->persist($commentaire);
             $entityManager->flush();
-            return $this->redirectToRoute('app_reservation_new', ['id' => $room->getId()]);
 
+            $this->addFlash('success', 'Comment successfully added!');
+            return $this->redirectToRoute('app_reservation_new', ['id' => $room->getId()]);
         }
+
         return $this->render('reservation/new.html.twig', [
             'reservation' => $reservation,
             'form' => $form->createView(),
@@ -94,7 +104,8 @@ class ReservationController extends AbstractController
     public function service(
         Request $request,
         EntityManagerInterface $entityManager,
-        ReservationRepository $reservationRepository
+        ReservationRepository $reservationRepository,
+        EventRepository $eventRepository
     ): Response {
         $reservation = $reservationRepository->find($request->get('id'));
 
@@ -102,24 +113,31 @@ class ReservationController extends AbstractController
             throw $this->createNotFoundException('Reservation not found.');
         }
 
-        $form = $this->createForm(ServiceFormType2Type::class, $reservation);
+        $events = $eventRepository->findEventsInRange($reservation->getStartDate(), $reservation->getEndDate());
+
+        $form = $this->createForm(ServiceFormType2Type::class, $reservation, [
+            'events' => $events
+        ]);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
             $basePrice = $reservation->getPrix();
 
-
             foreach ($reservation->getServices() as $service) {
                 $basePrice += $service->getPrix();
+            }
+
+            foreach ($reservation->getEvents() as $event) {
+                $basePrice += $event->getPrix();
             }
 
             $reservation->setPrix($basePrice);
 
             $entityManager->flush();
 
-            $this->addFlash('success', 'Services and total price updated successfully.');
+            $this->addFlash('success', 'Services, events, and total price updated successfully.');
 
-            return $this->redirectToRoute('app_reservation_index', [
+            return $this->redirectToRoute('app_reservation_confirmed', [
                 'id' => $reservation->getId(),
             ]);
         }
@@ -127,7 +145,23 @@ class ReservationController extends AbstractController
         return $this->render('service/confirm.html.twig', [
             'reservation' => $reservation,
             'form' => $form->createView(),
+            'events' => $events,
         ]);
+    }
+
+    #[Route('/client/reservation/confirmed/{id}', name: 'app_reservation_confirmed', methods: ['GET', 'POST'])]
+    public function confirmed(Reservation $reservation, Request $request, EntityManagerInterface $entityManager): Response
+    {
+        $user = $this->getUser();
+        return $this->render('reservation/confirmation.html.twig', [
+            'reservation' => $reservation,
+            'user' => $user,
+        ]);
+    }
+    #[Route('/client/reservation/detail/{id}', name: 'app_reservation_detail', methods: ['GET', 'POST'])]
+    public function detail(Reservation $reservation, Request $request, EntityManagerInterface $entityManager): Response
+    {
+        return $this->render('reservation/detail.html.twig', ['reservation'=>$reservation]);
     }
 
     #[Route('/client/reservation', name: 'app_reservation_index', methods: ['GET'])]
@@ -142,8 +176,14 @@ class ReservationController extends AbstractController
     #[Route('/admin/reservation', name: 'admin_reservation_list')]
     public function display(Request $request, EntityManagerInterface $entityManager, PaginatorInterface $paginator): Response
     {
+        $statut = $request->query->get('statut');
 
         $queryBuilder = $entityManager->getRepository(Reservation::class)->createQueryBuilder('reservation');
+
+        if ($statut) {
+            $queryBuilder->andWhere('reservation.statut = :statut')
+                ->setParameter('statut', $statut);
+        }
 
         $pagination = $paginator->paginate(
             $queryBuilder->getQuery(),
@@ -154,8 +194,11 @@ class ReservationController extends AbstractController
         return $this->render('reservation/list.html.twig', [
             'reservations' => $pagination,
             'controller_name' => 'ReservationController',
+            'statut' => $statut,
         ]);
     }
+
+
     #[Route('/admin/reservation/delete/{id}', name: 'delete_reservation')]
     public function deleteReservation(Reservation $reservation, EntityManagerInterface $entityManager): Response
     {
