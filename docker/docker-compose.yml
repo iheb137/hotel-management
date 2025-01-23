@@ -6,8 +6,6 @@ services:
     restart: always
     volumes:
       - db-data:/var/lib/mysql
-    environment:
-      MYSQL_ALLOW_EMPTY_PASSWORD: 'yes'
     networks:
       - dev
 

@@ -6,6 +6,7 @@
 
 
 
+    <title>{{ room.name }}</title>
 
     <section class="breadcrumb-outer">
         <div class="container">
@@ -141,7 +142,9 @@
                         <strong>{{ comment.user.nom }}:</strong><br>
                         <span>{{ comment.date|date('F j, Y \\a\\t g:i a') }}</span><br>
                         <p>{{ comment.texte }}</p>
+<script>
 
+</script>
                         {% if app.user and (comment.user.id == app.user.id or 'ROLE_ADMIN' in app.user.roles) %}
                             <form method="post" action="{{ path('app_comment_delete', { id: comment.id }) }}" style="display: inline;">
                                 <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ comment.id) }}">
