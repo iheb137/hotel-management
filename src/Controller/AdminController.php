@@ -2,47 +2,50 @@
 
 namespace App\Controller;
 
-use App\Repository\CommentaireRepository;
-use App\Repository\EventRepository;
+use App\Entity\Reservation;
 use App\Repository\ReservationRepository;
-use App\Repository\RoomRepository;
-use App\Repository\ServiceRepository;
-use App\Repository\UserRepository;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Routing\Annotation\Route;
 
+#[Route('/admin')]
 class AdminController extends AbstractController
 {
-    #[Route('/admin', name: 'app_dashboard')]
-    public function index(ReservationRepository $reservationRepository, RoomRepository $roomRepository, EventRepository $eventRepository, CommentaireRepository $commentaireRepository, UserRepository $userRepository, ServiceRepository $serviceRepository): Response
-    {  $eventStat=$eventRepository->stat();
-        $serviceStat=$serviceRepository->stat();
-        $RoomStats=$roomRepository->getRoomReservationStats();
-        $ClientNbr=$userRepository->countUserByRole('ROLE_CLIENT');
-        $AdminNbr=$userRepository->countUserByRole('ROLE_ADMIN');
-        $reviewsNbr=$commentaireRepository->countRoomsComments();
-        $commentsNbr=$commentaireRepository->countEventsComments();
-        $roombr=$roomRepository->countRooms();
-        $eventnbr=$eventRepository->countEventsafterdate($date = new \DateTime());
-        $revenue=$reservationRepository->totalPrix();
-        $revenueThisMonth=$reservationRepository->totalPrixThisMonth();
-        return $this->render('admin/dashboard.html.twig', [
-            'controller_name' => 'AdminController','revenue'=>$revenue,
-            'selected'=>'dashboard','revenueThisMonth'=>$revenueThisMonth,'roomnbr'=>$roombr,'eventnbr'=>$eventnbr,'reviewsNbr'=>$reviewsNbr,'commentsNbr'=>$commentsNbr,'ClientNbr'=>$ClientNbr,'AdminNbr'=>$AdminNbr,'RoomStats'=>$RoomStats,'serviceStat'=>$serviceStat,'eventStat'=>$eventStat
+    #[Route('/dashboard', name: 'app_dashboard')]
+    public function dashboard(): Response
+    {
+        return $this->redirectToRoute('admin_reservations');
+    }
+
+    #[Route('/reservations', name: 'admin_reservations')]
+    public function reservations(ReservationRepository $reservationRepository): Response
+    {
+        return $this->render('admin/reservations.html.twig', [
+            'reservations' => $reservationRepository->findBy([], ['createdAt' => 'DESC']),
+            'selected' => 'reservations', // ✅ IMPORTANT
         ]);
     }
-    #[Route('/about', name: 'app_about')]
-    public function about(UserRepository $userRepository, ServiceRepository $serviceRepository, EventRepository $eventRepository, RoomRepository $roomRepository): Response
-    {
-        $usernbr=$userRepository->countUsers();
-        $eventnbr=$eventRepository->countEventsafterdate($date = new \DateTime());
-        $servicenbr=$serviceRepository->countServices();
-        $roomnbr=$roomRepository->countRooms();
-        $services = $serviceRepository->findAll();
-        $users = $userRepository->findUsersByRole('ROLE_ADMIN');
-        return $this->render('admin/about.html.twig', ['users' => $users,'services' => $services,'eventnbr' => $eventnbr,'roomnbr' => $roomnbr,'usernbr'=>$usernbr,'servicenbr'=>$servicenbr]);
+
+    #[Route('/reservation/{id}/status', name: 'admin_reservation_status', methods: ['POST'])]
+    public function updateStatus(
+        Reservation $reservation,
+        Request $request,
+        EntityManagerInterface $em
+    ): Response {
+        $status = $request->request->get('status');
+
+        if (!in_array($status, ['pending', 'accepted', 'refused'])) {
+            $this->addFlash('danger', 'Statut invalide');
+            return $this->redirectToRoute('admin_reservations');
+        }
+
+        $reservation->setStatut($status);
+        $em->flush();
+
+        $this->addFlash('success', 'Statut mis à jour avec succès');
+
+        return $this->redirectToRoute('admin_reservations');
     }
-
-
 }

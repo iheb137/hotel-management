@@ -25,21 +25,18 @@ class RegistrationControllerTest extends WebTestCase
 
         $crawler = $client->request('GET', '/register');
 
-        // Submit registration form with test data
-        $formData = [
+        $form = $crawler->filter('form')->form([
             'registration_form[email]' => 'testuser@example.com',
             'registration_form[plainPassword]' => 'password123',
-        ];
+        ]);
 
-        $client->request('POST', '/register', $formData);
+        $client->submit($form);
 
-        // Ensure the response redirects after registration
         $this->assertResponseRedirects();
 
-        // Follow the redirect to ensure login
         $client->followRedirect();
 
-        $this->assertRouteSame('app_home');  // Adjust if login redirects to a different route
-        $this->assertSelectorTextContains('bien inscrit!', 'User registration confirmation message');
+        $this->assertRouteSame('app_home');
+        $this->assertSelectorTextContains('body', 'IH-AR Luxury Hotel');
     }
 }

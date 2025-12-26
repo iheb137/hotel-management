@@ -55,7 +55,13 @@
                 <h3>Current Information</h3>
                 <div class="info-row">
                     <div class="mb-3">
-                        <img src="{{ asset(app.user.image) }}" alt="Profile Image" class="img-fluid" style="width:250px;height: 250px">
+                        {% if app.user.image %}
+                            <img src="{{ asset(app.user.image) }}" alt="Profile Image" class="img-fluid" style="width:250px;height: 250px">
+                        {% else %}
+                            <div style="width:250px;height:250px; background-color: #ccc; border-radius: 8px; display: flex; align-items: center; justify-content: center;">
+                                <span style="color: #666; font-size: 80px;">{{ app.user.nom|first|upper|default('U') }}</span>
+                            </div>
+                        {% endif %}
                     </div>
                     <div>
                         <p><strong>Email:</strong> <br>{{ app.user.email }}</p>
@@ -115,41 +121,41 @@
     <section>
         <div class="rounded-box" style="margin-left: 20px; margin-right: 20px" >
             <h3>Current Reservations</h3>
-        <table class="table">
-            <thead>
-            <tr>
-                <th>ID</th>
-                <th>Room</th>
-                <th>Check in</th>
-                <th>Check out</th>
-                <th>Total Price</th>
-                <th>Status</th>
-                <th>Detail</th>
-            </tr>
-            </thead>
-            <tbody>
-            {% for reservation in reservations %}
+            <table class="table">
+                <thead>
                 <tr>
-                    <td>{{ reservation.id }}</td>
-                    <td>{{ reservation.room.name }}</td>
-                    <td>{{ reservation.startDate|date('Y-m-d') }}</td>
-                    <td>{{ reservation.endDate|date('Y-m-d') }}</td>
-                    <td>{{ reservation.prix }}</td>
-                    <td>{{ reservation.statut }}</td>                <td>
-                        <a href="{{ path('app_reservation_detail', {'id': reservation.id}) }}" class="btn btn-success">
-                            <i class="fa fa-search"></i>
-                        </a>
-                    </td>
-
+                    <th>ID</th>
+                    <th>Room</th>
+                    <th>Check in</th>
+                    <th>Check out</th>
+                    <th>Total Price</th>
+                    <th>Status</th>
+                    <th>Detail</th>
                 </tr>
-            {% else %}
-                <tr>
-                    <td colspan="8">No reservations found.</td>
-                </tr>
-            {% endfor %}
+                </thead>
+                <tbody>
+                {% for reservation in reservations %}
+                    <tr>
+                        <td>{{ reservation.id }}</td>
+                        <td>{{ reservation.room.name }}</td>
+                        <td>{{ reservation.startDate|date('Y-m-d') }}</td>
+                        <td>{{ reservation.endDate|date('Y-m-d') }}</td>
+                        <td>{{ reservation.prix }}</td>
+                        <td>{{ reservation.statut }}</td>                <td>
+                            <a href="{{ path('app_reservation_detail', {'id': reservation.id}) }}" class="btn btn-success">
+                                <i class="fa fa-search"></i>
+                            </a>
+                        </td>
 
-            </tbody>
-        </table>
+                    </tr>
+                {% else %}
+                    <tr>
+                        <td colspan="8">No reservations found.</td>
+                    </tr>
+                {% endfor %}
+
+                </tbody>
+            </table>
         </div>
     </section>
 

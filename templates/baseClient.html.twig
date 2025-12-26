@@ -5,9 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
 
     <!-- Favicon -->
-    <link rel="shortcut icon" type="image/x-icon" href="images/favicon.png')}}" />
+    <link rel="shortcut icon" type="image/x-icon" href="{{ asset('assets/images/favicon.png') }}" />
     <!-- Bootstrap core CSS -->
-    <link href="{{ asset('assets/css/bootstrap.min.css')}}" rel="stylesheet" type="text/css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet" type="text/css">
 
     <!--Default CSS-->
     <link href="{{ asset('assets/css/default.css')}}" rel="stylesheet" type="text/css">
@@ -24,69 +24,56 @@
     <div id="status"></div>
 </div>
 
-<header class="main_header_area">
-
-    <div class="header_menu affix-top">
-        <div class="container">
-            <nav class="navbar navbar-default" >
-                <div class="navbar-header">
-                    <a class="navbar-brand" href="index.html">
-                        <img alt="Image" src="{{asset('assets/images/logo.png')}}" class="logo-white" />
-                        <img alt="Image" src="{{asset('assets/images/logo-black.png')}}" class="logo-black" />
-                    </a>
-                </div>
-                <div  id="bs-example-navbar-collapse-1" style="margin-left: 400px">
-                    <ul class="nav navbar-nav" id="responsive-menu" >
-                        <li class="dropdown submenu">
-                            <a href="{{ path('app_home') }}" 
-                            >Home</a>
-
-                        </li>
-                        <li class="submenu ">
-                            <a href="{{ path('app_room') }}">Rooms</a>
-
-                        </li>
-                        <li class="submenu dropdown">
-                            <a href="{{ path('event_list') }}"
-                            >Events</a>
-
-                        </li>
-                        <li class="submenu dropdown">
-                            <a href="{{ path('app_about') }}"
-                            >About us</a>
-
-                        </li>
-                        <li class="submenu dropdown">
-                            <a class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"
-                            >Profile<i class="fa fa-angle-down" aria-hidden="true"></i
-                                ></a>
-                            <ul class="dropdown-menu">
-                                <li><a href="{{ path('account_edit') }}">Manage Account</a></li>
-                                <li><a href="{{ path('app_logout') }}">Log Out</a></li>
-
-                            </ul>
-                        </li>
-
-                        {%if 'ROLE_ADMIN' in app.user.roles %}
-                        <li class="submenu dropdown">
-                            <a href="{{ path('app_dashboard') }}"
-                            >dashboard</a>
-                        {% endif %}
-                        </li>
-
-
-                    </ul>
-
-                </div>
-                <!-- /.navbar-collapse -->
-                <div id="slicknav-mobile"></div>
-            </nav>
+<header class="site-header">
+    <div class="top-bar">
+        <div class="container top-bar__wrapper">
+            <div class="top-bar__left">
+                <a href="mailto:info@ih-ar.com"><i class="fa fa-envelope"></i> info@ih-ar.com</a>
+                <a href="tel:+977222333444"><i class="fa fa-phone"></i> +21628478199</a>
+            </div>
+            <div class="top-bar__right">
+                <span class="top-bar__lang">
+                    <i class="fa fa-globe"></i> {{ app.request.locale|upper }}
+                </span>
+                <span class="top-bar__user">
+                    <i class="fa fa-user-circle"></i> {{ app.user.prenom ?? app.user.nom ?? app.user.email }}
+                </span>
+                <a href="{{ path('account_edit') }}"><i class="fa fa-cog"></i> Account</a>
+                <a href="{{ path('app_logout') }}"><i class="fa fa-sign-out"></i> Logout</a>
+            </div>
         </div>
-        <!-- /.container-fluid -->
     </div>
-    <!-- Navigation Bar Ends -->
+    <div class="main-nav">
+        <div class="container nav-wrapper">
+            <a class="brand" href="{{ path('app_home') }}">
+                <img src="{{ asset('uploads/images/default.png') }}" alt="IH-AR" class="brand-logo" />
+                <div class="brand-text">
+                    <span class="brand-title">IH-AR Luxury Hotel</span>
+                    <span class="brand-tagline">Since 2025</span>
+                </div>
+            </a>
+            <button class="nav-toggle" aria-label="Toggle navigation">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+            <nav class="primary-nav">
+                <a href="{{ path('app_home') }}">Home</a>
+                <a href="{{ path('app_room') }}">Rooms</a>
+                <a href="{{ path('event_list') }}">Events</a>
+                {# <a href="{{ path('app_about') }}">About us</a> #}
+
+                <a href="#services">Services</a>
+                {% if 'ROLE_ADMIN' in app.user.roles %}
+                    <a href="{{ path('app_dashboard') }}">Dashboard</a>
+                {% endif %}
+            </nav>
+            <a class="btn btn-book" href="{{ path('app_room') }}">
+                <i class="fa fa-calendar-check-o"></i> Book Now
+            </a>
+        </div>
+    </div>
 </header>
-<!-- header Ends -->
 
 <!-- breadcrumb starts -->
 
@@ -99,7 +86,7 @@
     <div class="footer-top">
         <div class="container">
             <div class="footer-logo text-center">
-                <img src="{{asset('assets/images/logo.png')}}" alt="Image" />
+                <img src="{{asset('uploads/images/default.png')}}" alt="Image" />
             </div>
             <div class="footer-content">
                 <div class="row">
@@ -152,7 +139,7 @@
                             <h4>Contact info</h4>
                             <ul>
                                 <li>Tel: 977-222-444-6666</li>
-                                <li>Email: info@hotux.com.np</li>
+                                <li>Email: info@ih-ar.com</li>
                                 <li>Fax: 977-222-444-666</li>
                                 <li>Address: 445 Mount Eden Road, Sundarbasti, Chakrapath</li>
                             </ul>
@@ -167,7 +154,7 @@
             <div class="row">
                 <div class="col-md-4 col-sm-12 col-xs-12">
                     <div class="copyright-content">
-                        <p>Copyright 2019. Made with <span>♥</span>. All Rights Reserved. <a href="#">Hotux</a></p>
+                        <p>Made by Ihebeddine saafi et arbi hazbri (ING-4-J-GLCI-C) - 2025. All Rights Reserved. <a href="#">IH-AR</a></p>
                         <ul>
                             <li>
                                 <a href="#"><i class="fab fa-facebook" aria-hidden="true"></i></a>
@@ -198,8 +185,8 @@
                         </ul>
                     </div>
                     <div class="playstore-links">
-                        <img src="{{asset('assets/images/icons/appstore.png')}}" alt="image" class="mar-right-10" />
-                        <img src="{{asset('assets/images/icons/googleplay.png')}}" alt="image" />
+                        <img src="{{asset('uploads/images/default.png')}}" alt="image" class="mar-right-10" />
+                        <img src="{{asset('uploads/images/default.png')}}" alt="image" />
                     </div>
                 </div>
             </div>
@@ -218,7 +205,7 @@
     <div class="modal-dialog">
         <div class="modal-content login-content">
             <div class="login-image">
-                <img src="{{asset('assets/images/logo-black.png')}}" alt="image" />
+                <img src="{{asset('uploads/images/default.png')}}" alt="image" />
             </div>
             <h3>Hello!Sign into your account</h3>
             <form>
@@ -235,7 +222,7 @@
             </form>
             <div class="form-btn">
                 <a href="#" class="btn btn-orange">LOGIN</a>
-                <p>Need an Account?<a href="#"> Create your Hotux account</a></p>
+                <p>Need an Account?<a href="#"> Create your IH-AR account</a></p>
             </div>
             <ul class="social-links">
                 <li>
@@ -256,16 +243,67 @@
 </div>
 
 <div class="modal fade" id="register" role="dialog">
-  <a href=""></a>
+    <div class="modal-dialog">
+        <div class="modal-content login-content">
+            <div class="login-image">
+                <img src="{{asset('uploads/images/default.png')}}" alt="image" />
+            </div>
+            <h3>Awesome! Create an IH-AR Account</h3>
+            <form>
+                <div class="form-group">
+                    <input type="text" placeholder="Enter username" />
+                </div>
+                <div class="form-group">
+                    <input type="email" placeholder="Enter email address" />
+                </div>
+                <div class="form-group">
+                    <input type="password" placeholder="Enter password" />
+                </div>
+                <div class="form-group">
+                    <input type="password" placeholder="Confirm password" />
+                </div>
+            </form>
+            <div class="form-btn">
+                <a href="{{ path('app_register') }}" class="btn btn-orange">SIGN UP</a>
+            </div>
+            <ul class="social-links">
+                <li>
+                    <a href="#"><i class="fab fa-facebook" aria-hidden="true"></i></a>
+                </li>
+                <li>
+                    <a href="#"><i class="fab fa-twitter" aria-hidden="true"></i></a>
+                </li>
+                <li>
+                    <a href="#"><i class="fab fa-instagram" aria-hidden="true"></i></a>
+                </li>
+                <li>
+                    <a href="#"><i class="fab fa-linkedin" aria-hidden="true"></i></a>
+                </li>
+            </ul>
+        </div>
+    </div>
 </div>
 
 <!-- *Scripts* -->
 <script src="https://cdn.jsdelivr.net/npm/feather-icons"></script>
 
-<script src="{{ asset('assets/js/jquery-3.3.1.min.js')}}"></script>
-<script src="{{ asset('assets/js/bootstrap.min.js')}}"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/4.3.1/js/bootstrap.min.js"></script>
 <script src="{{ asset('assets/js/plugin.js')}}"></script>
 <script src="{{ asset('assets/js/main.js')}}"></script>
-<script src="{{ asset('assets/js/custom-nav.js')}}"></script>
+<script>
+    const navToggleClient = document.querySelector('.nav-toggle');
+    const primaryNavClient = document.querySelector('.primary-nav');
+    const bookBtnClient = document.querySelector('.btn-book');
+    if (navToggleClient && primaryNavClient) {
+        navToggleClient.addEventListener('click', () => {
+            navToggleClient.classList.toggle('is-open');
+            primaryNavClient.classList.toggle('is-open');
+            if (bookBtnClient) {
+                bookBtnClient.classList.toggle('is-open');
+            }
+        });
+    }
+</script>
 </body>
 </html>

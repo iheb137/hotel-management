@@ -1,0 +1,10 @@
+vendor
+var
+node_modules
+.git
+.idea
+public/assets
+.env.local
+.env.*.local
+**/.DS_Store
+

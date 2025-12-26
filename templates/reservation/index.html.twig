@@ -3,17 +3,17 @@
 {% block title %}Reservations{% endblock %}
 
 {% block body %}
-<style>
+    <style>
 
-    .rounded-box {
-        background-color: #f8f9fa;
-        border: 1px solid #ccc;
-        border-radius: 15px;
-        padding: 20px;
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        .rounded-box {
+            background-color: #f8f9fa;
+            border: 1px solid #ccc;
+            border-radius: 15px;
+            padding: 20px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 
-        margin-top: 20px;
-    }
+            margin-top: 20px;
+        }
     </style>
     <section class="breadcrumb-outer">
         <div class="container">
@@ -23,37 +23,37 @@
             </div>
         </div>
     </section>
-<div class="rounded-box" style="margin: 30px">
-    <table class="table">
-        <thead>
-        <tr>
-            <th>ID</th>
-            <th>Room</th>
-            <th>User</th>
-            <th>Start Date</th>
-            <th>End Date</th>
-            <th>Price</th>
-            <th>Status</th>
-        </tr>
-        </thead>
-        <tbody>
-        {% for reservation in reservations %}
+    <div class="rounded-box" style="margin: 30px">
+        <table class="table">
+            <thead>
             <tr>
-                <td>{{ reservation.id }}</td>
-                <td>{{ reservation.room.name }}</td>
-                <td>{{ reservation.user.email }}</td>
-                <td>{{ reservation.startDate|date('Y-m-d') }}</td>
-                <td>{{ reservation.endDate|date('Y-m-d') }}</td>
-                <td>{{ reservation.prix }}</td>
-                <td>{{ reservation.statut }}</td>
-
+                <th>ID</th>
+                <th>Room</th>
+                <th>User</th>
+                <th>Start Date</th>
+                <th>End Date</th>
+                <th>Price</th>
+                <th>Status</th>
             </tr>
-        {% else %}
-            <tr>
-                <td colspan="8">No reservations found.</td>
-            </tr>
-        {% endfor %}
+            </thead>
+            <tbody>
+            {% for reservation in reservations %}
+                <tr>
+                    <td>{{ reservation.id }}</td>
+                    <td>{{ reservation.room.name }}</td>
+                    <td>{{ reservation.user.email }}</td>
+                    <td>{{ reservation.startDate|date('Y-m-d') }}</td>
+                    <td>{{ reservation.endDate|date('Y-m-d') }}</td>
+                    <td>{{ reservation.prix }}</td>
+                    <td>{{ reservation.statut }}</td>
 
-        </tbody>
-    </table></div>
+                </tr>
+            {% else %}
+                <tr>
+                    <td colspan="8">No reservations found.</td>
+                </tr>
+            {% endfor %}
+
+            </tbody>
+        </table></div>
 {% endblock %}

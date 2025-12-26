@@ -1,176 +1,36 @@
-{% extends 'baseClient.html.twig' %}
+{% extends 'base.html.twig' %}
 
 {% block body %}
-    <title>{{ reservation.room.name }}</title>
+    <div class="container mt-5">
+        <h2>Détail de la réservation</h2>
 
-    <section class="breadcrumb-outer">
-        <div class="container">
-            <div class="breadcrumb-content">
-                <h2>Reservation</h2>
-                <nav aria-label="breadcrumb">
-                    <ul class="breadcrumb">
-                        <li class="breadcrumb-item"><a href="#">Home</a></li>
-                        <li class="breadcrumb-item active" aria-current="page">Booking</li>
-                    </ul>
-                </nav>
-            </div>
-        </div>
-    </section>
+        <ul class="list-group mt-4">
+            <li class="list-group-item">
+                <strong>Chambre :</strong> {{ reservation.room.nom }}
+            </li>
+            <li class="list-group-item">
+                <strong>Date début :</strong> {{ reservation.startDate|date('Y-m-d') }}
+            </li>
+            <li class="list-group-item">
+                <strong>Date fin :</strong> {{ reservation.endDate|date('Y-m-d') }}
+            </li>
+            <li class="list-group-item">
+                <strong>Prix :</strong> {{ reservation.prix }} €
+            </li>
+            <li class="list-group-item">
+                <strong>Statut :</strong>
+                <span class="badge
+                {% if reservation.statut == 'accepted' %}bg-success
+                {% elseif reservation.statut == 'refused' %}bg-danger
+                {% else %}bg-warning{% endif %}
+            ">
+                {{ reservation.statut|capitalize }}
+            </span>
+            </li>
+        </ul>
 
-    <section class="content" style="padding-top: 0;" >
-
-
-        <div class="container" >
-            <div class="reservation-links text-center">
-                <br><br>
-                <h2 class="mar-bottom-60 text-capitalize">Reservation Details</h2>
-            </div>
-            <div class="booking" >
-                <div class="row">
-                    <div class="col-lg-8">
-                        <div class="booking-content">
-                            <div class="booking-image">
-                                <img src="{{ asset(reservation.room.Thumbnail) }}" alt="image" style="width: 100%; height: 100%; object-fit: cover;"/>
-                                <div class="booking-title">
-                                    <div class="title-left">
-                                        <h3>{{ reservation.room.name }}</h3>
-                                    </div>
-                                    <div class="title-right pull-right">
-                                        <div class="title-price">
-                                            <h4 class="pad-top-15">
-                                                <a href="#">{{ reservation.room.prix }}<span>/Night</span></a>
-                                            </h4>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="booking-desc mar-top-50">
-                                <p>
-                                    {{ reservation.room.description }}
-                                </p>
-                            </div>
-
-                            <div class="other-details detail-table mar-top-50" >
-                                <h4 class="mar-bottom-30">Order Details</h4>
-                                <table class="table">
-                                    <tr>
-                                        <td>Booking id:</td>
-                                        <td>{{ reservation.id }}</td>
-                                    </tr>
-                                    <tr>
-                                        <td>First Name:</td>
-                                        <td>{{ reservation.user.nom }}</td>
-                                    </tr>
-                                    <tr>
-                                        <td>Last Name:</td>
-                                        <td>{{ reservation.user.prenom }}</td>
-                                    </tr>
-                                    <tr>
-                                        <td>Phone Number:</td>
-                                        <td>{{ reservation.user.telephone }}</td>
-                                    </tr>
-
-                                    <tr>
-                                        <td>Email:</td>
-                                        <td>{{ reservation.user.email }}</td>
-                                    </tr>
-
-                                </table>
-                            </div>
-
-                            <br><br>
-
-                        </div>
-                    </div>
-                    <div>
-                        <div class="col-lg-4">
-                            <div class="detail-sidebar">
-                                <div class="sidebar-reservation">
-                                    <h3>Your reservation</h3>
-                                    <div class="reservation-detail">
-                                        <div class="rd-top">
-                                            <div class="rd-box">
-                                                <label>Check in</label>
-                                                <p class="bold">{{ reservation.startdate|date('d') }}</p>
-                                                <p>{{ reservation.startdate|date('Y-m-d') }}<br />{{ reservation.startdate|date('l') }}</p>
-                                            </div>
-                                            <div class="rd-box">
-                                                <label>Check out</label>
-                                                <p class="bold">{{ reservation.enddate|date('d') }}</p>
-                                                <p>{{ reservation.enddate|date('Y-m-d') }}<br />{{ reservation.enddate|date('l') }}</p>
-                                            </div>
-                                        </div>
-                                        <div class="rd-top">
-                                            <div class="rd-box">
-                                                <p class="bold">{{ reservation.room.bedNbr }}</p>
-                                                <p>Bed Number</p>
-                                            </div>
-                                            <div class="rd-box">
-                                                <p class="bold">{% set difference = reservation.enddate|date('U') - reservation.startdate|date('U') %}
-                                                    {{ difference / 86400 }}</p>
-                                                <p>Night</p>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <table class="reservation-table table">
-                                        <tbody>
-                                        <tr>
-                                            <td>Rate x {{ difference / 86400 }} Nights</td>
-                                            <td>{{ reservation.room.prix }} x {{ difference / 86400 }}</td>
-                                        </tr>
-                                        {% if reservation.services is not null and reservation.services|length > 0 %}
-                                            <tr>
-                                                <td style="font-weight: bold">Service:</td>
-                                                <td></td>
-                                            </tr>
-                                            {% for service in reservation.services %}
-                                                <tr>
-                                                    <td>{{ service.nom }}</td>
-                                                    <td>{{ service.prix }}</td>
-                                                </tr>
-                                            {% endfor %}
-
-                                        {% endif %}
-
-                                        {% if reservation.events is not null and reservation.events|length > 0 %}
-                                            <tr>
-                                                <td style="font-weight: bold">Events:</td>
-                                                <td></td>
-                                            </tr>
-                                            {% for event in reservation.events %}
-                                                <tr>
-                                                    <td>{{ event.name }}</td>
-                                                    <td>{{ event.prix }}</td>
-                                                </tr>
-                                            {% endfor %}
-
-                                        {% endif %}
-
-                                        </tbody>
-                                        <tfoot>
-                                        <tr>
-                                            <td>Total</td>
-                                            <td>{{ reservation.prix }}</td>
-                                        </tr>
-                                        </tfoot>
-                                    </table>
-
-                                </div>
-                                <div>
-
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-            </div>
-
-        </div>
-
-
-    </section>
-
-
-
+        <a href="{{ path('user_reservations') }}" class="btn btn-secondary mt-3">
+            Retour
+        </a>
+    </div>
 {% endblock %}

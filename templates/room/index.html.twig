@@ -38,7 +38,12 @@
                             <p style="margin-bottom: 10px;">{{ room.description }}</p>
 
                             <div class="room-btns" style="margin-top: auto;">
-                                <a href="{{ path('app_reservation_new', {'id': room.id}) }}" class="btn" style="padding: 8px 12px; border: none; border-radius: 5px; text-decoration: none; font-size: 14px; color: #fff; background-color: #ff5722;">RESERVE</a>
+                                <a href="{{ path('reservation_new', {'id': room.id}) }}"
+                                   class="btn"
+                                   style="padding: 8px 12px; border: none; border-radius: 5px; text-decoration: none; font-size: 14px; color: #fff; background-color: #ff5722;">
+                                    RESERVE
+                                </a>
+
                             </div>
                         </div>
                     </div>

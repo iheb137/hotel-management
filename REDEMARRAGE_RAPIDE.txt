@@ -1,0 +1,64 @@
+================================================================================
+          COMMENT DÉMARRER L'APPLICATION APRÈS REDÉMARRAGE DU PC
+================================================================================
+
+🚀 MÉTHODE RAPIDE (30 secondes)
+================================================================================
+
+1. Lance Docker Desktop (si pas automatique)
+   → Cherche "Docker Desktop" dans le menu Démarrer
+
+2. Double-clique sur "DEMARRER_APP.bat"
+   → Le script fait tout automatiquement
+
+3. Attends 15 secondes
+   → MySQL prend un peu de temps au démarrage
+
+4. Ouvre http://localhost:8081 dans ton navigateur
+   → L'application est prête !
+
+================================================================================
+📝 COMMANDES ALTERNATIVES
+================================================================================
+
+Si tu préfères utiliser la ligne de commande :
+
+   docker compose up -d
+
+Puis attends 15 secondes et ouvre http://localhost:8081
+
+================================================================================
+⏱️ TEMPS DE DÉMARRAGE
+================================================================================
+
+- Docker Desktop : 30-60 secondes (premier démarrage)
+- MySQL : 10-15 secondes
+- Total : ~1-2 minutes maximum
+
+================================================================================
+✅ VÉRIFICATION RAPIDE
+================================================================================
+
+Pour vérifier que tout fonctionne :
+
+   docker compose ps
+
+Tu dois voir 3 conteneurs "Up" :
+   - true_project-db-1
+   - true_project-nginx-1
+   - true_project-php-1
+
+================================================================================
+🐛 SI ÇA NE MARCHE PAS
+================================================================================
+
+1. Vérifie que Docker Desktop est démarré
+2. Attends un peu plus (MySQL peut prendre 20-30 secondes)
+3. Redémarre : docker compose restart
+
+================================================================================
+
+C'EST TOUT ! 🎉
+
+
+

@@ -1,0 +1,76 @@
+stages:
+  - validate
+  - test
+  - analyze
+  - build
+
+variables:
+  COMPOSER_CACHE_DIR: .composer
+  APP_ENV: test
+
+composer_install:
+  stage: validate
+  image: composer:2
+  cache:
+    key: composer
+    paths:
+      - .composer/
+  script:
+    - composer install --prefer-dist --no-interaction --no-progress
+  artifacts:
+    paths:
+      - vendor/
+      - symfony.lock
+      - .composer/
+
+phpunit:
+  stage: test
+  image: php:8.2
+  needs:
+    - composer_install
+  before_script:
+    - apt-get update && apt-get install -y git unzip libzip-dev libicu-dev libpng-dev libjpeg62-turbo-dev libfreetype6-dev
+    - docker-php-ext-configure gd --with-freetype --with-jpeg
+    - docker-php-ext-install pdo_mysql zip intl gd
+    - php -v
+  script:
+    - php bin/phpunit --configuration phpunit.xml.dist --colors=always --log-junit junit.xml
+  artifacts:
+    when: always
+    reports:
+      junit: junit.xml
+
+phpstan:
+  stage: analyze
+  image: php:8.2
+  needs:
+    - composer_install
+  before_script:
+    - apt-get update && apt-get install -y git unzip
+  script:
+    - vendor/bin/phpstan analyse src --level=3 --no-progress
+
+docker_build_push:
+  stage: build
+  image: docker:24
+  services:
+    - docker:24-dind
+  rules:
+    - if: '$CI_COMMIT_BRANCH == "main"'
+  variables:
+    DOCKER_DRIVER: overlay2
+  script:
+    - echo "$DOCKERHUB_TOKEN" | docker login -u "$DOCKERHUB_USERNAME" --password-stdin
+    - docker build -t $DOCKERHUB_USERNAME/ih-ar-app:$CI_COMMIT_SHORT_SHA -t $DOCKERHUB_USERNAME/ih-ar-app:latest .
+    - docker push $DOCKERHUB_USERNAME/ih-ar-app --all-tags
+
+sonarqube:
+  stage: analyze
+  image: sonarsource/sonar-scanner-cli:5
+  rules:
+    - if: '$SONAR_HOST_URL && $SONAR_TOKEN'
+  script:
+    - sonar-scanner
+  variables:
+    SONAR_HOST_URL: $SONAR_HOST_URL
+    SONAR_LOGIN: $SONAR_TOKEN

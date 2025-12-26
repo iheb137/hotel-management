@@ -6,8 +6,10 @@ use App\Entity\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\Security\Core\Exception\UnsupportedUserException;
+use Symfony\Component\Security\Core\Exception\UserNotFoundException;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\PasswordUpgraderInterface;
+use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
  * @extends ServiceEntityRepository<User>
@@ -17,6 +19,24 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, User::class);
+    }
+
+    /**
+     * 🔑 MÉTHODE OBLIGATOIRE POUR L’AUTHENTIFICATION (Symfony 6+)
+     */
+    public function loadUserByIdentifier(string $identifier): UserInterface
+    {
+        $user = $this->createQueryBuilder('u')
+            ->andWhere('u.email = :email')
+            ->setParameter('email', $identifier)
+            ->getQuery()
+            ->getOneOrNullResult();
+
+        if (!$user) {
+            throw new UserNotFoundException(sprintf('User "%s" not found.', $identifier));
+        }
+
+        return $user;
     }
 
     /**
@@ -32,7 +52,8 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
         $this->getEntityManager()->persist($user);
         $this->getEntityManager()->flush();
     }
-    public function findUsersByRole($role)
+
+    public function findUsersByRole(string $role): array
     {
         return $this->createQueryBuilder('u')
             ->where('u.roles LIKE :role')
@@ -40,44 +61,23 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
             ->getQuery()
             ->getResult();
     }
-public function countUsers():int
-{
-    return $this->createQueryBuilder('u')
-        ->select('COUNT(u)')
-        ->getQuery()
-        ->getSingleScalarResult();
-}
-public function countUserByRole($role)
-{
-    return $this->createQueryBuilder('u')
-        ->select('COUNT(u)')
-        ->where('u.roles LIKE :role')
-        ->setParameter('role', '%'.$role.'%')
-        ->getQuery()
-        ->getSingleScalarResult();
-}
-    //    /**
-    //     * @return User[] Returns an array of User objects
-    //     */
-    //    public function findByExampleField($value): array
-    //    {
-    //        return $this->createQueryBuilder('u')
-    //            ->andWhere('u.exampleField = :val')
-    //            ->setParameter('val', $value)
-    //            ->orderBy('u.id', 'ASC')
-    //            ->setMaxResults(10)
-    //            ->getQuery()
-    //            ->getResult()
-    //        ;
-    //    }
 
-    //    public function findOneBySomeField($value): ?User
-    //    {
-    //        return $this->createQueryBuilder('u')
-    //            ->andWhere('u.exampleField = :val')
-    //            ->setParameter('val', $value)
-    //            ->getQuery()
-    //            ->getOneOrNullResult()
-    //        ;
-    //    }
+    public function countUsers(): int
+    {
+        return $this->createQueryBuilder('u')
+            ->select('COUNT(u)')
+            ->getQuery()
+            ->getSingleScalarResult();
+    }
+
+    public function countUserByRole(string $role): int
+    {
+        return $this->createQueryBuilder('u')
+            ->select('COUNT(u)')
+            ->where('u.roles LIKE :role')
+            ->setParameter('role', '%'.$role.'%')
+            ->getQuery()
+            ->getSingleScalarResult();
+    }
 }
+

@@ -39,7 +39,7 @@ class Room
     #[ORM\OneToMany(targetEntity: Commentaire::class, mappedBy: 'room')]
     private Collection $commentaires;
 
-    #[ORM\Column(length: 255, nullable: true)]
+    #[ORM\Column(name: 'thumbnail', length: 255, nullable: true)]
     private ?string $Thumbnail = null;
 
     public function __construct()
@@ -173,4 +173,18 @@ class Room
 
         return $this;
     }
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $image = null;
+
+    public function getImage(): ?string
+    {
+        return $this->image;
+    }
+
+    public function setImage(?string $image): self
+    {
+        $this->image = $image;
+        return $this;
+    }
+
 }

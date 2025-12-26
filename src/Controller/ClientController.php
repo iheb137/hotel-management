@@ -25,6 +25,12 @@ use Symfony\Component\HttpFoundation\Request;
 
 class ClientController extends AbstractController
 {
+    #[Route('/', name: 'app_index')]
+    public function indexRedirect(): Response
+    {
+        return $this->redirectToRoute('app_home');
+    }
+
     #[Route('home', name: 'app_home')]
     public function index(EntityManagerInterface $entityManager): Response
     {

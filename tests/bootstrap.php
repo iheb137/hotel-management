@@ -9,3 +9,17 @@ if (file_exists(dirname(__DIR__).'/config/bootstrap.php')) {
 } elseif (method_exists(Dotenv::class, 'bootEnv')) {
     (new Dotenv())->bootEnv(dirname(__DIR__).'/.env');
 }
+
+if ($_SERVER['APP_ENV'] === 'test') {
+    $kernel = new App\Kernel('test', false);
+    $kernel->boot();
+    $container = $kernel->getContainer();
+    $em = $container->get('doctrine')->getManager();
+    $metadata = $em->getMetadataFactory()->getAllMetadata();
+    if (!empty($metadata)) {
+        $tool = new Doctrine\ORM\Tools\SchemaTool($em);
+        $tool->dropSchema($metadata);
+        $tool->createSchema($metadata);
+    }
+    $kernel->shutdown();
+}

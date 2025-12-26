@@ -23,8 +23,6 @@ class Facture
     #[ORM\OneToOne(mappedBy: 'facture', cascade: ['persist', 'remove'])]
     private ?Reservation $reservation = null;
 
-    // Getters and Setters
-
     public function getId(): ?int
     {
         return $this->id;
@@ -35,10 +33,9 @@ class Facture
         return $this->montant;
     }
 
-    public function setMontant(?float $montant): static
+    public function setMontant(?float $montant): self
     {
         $this->montant = $montant;
-
         return $this;
     }
 
@@ -47,10 +44,9 @@ class Facture
         return $this->date;
     }
 
-    public function setDate(\DateTimeInterface $date): static
+    public function setDate(?\DateTimeInterface $date): self
     {
         $this->date = $date;
-
         return $this;
     }
 
@@ -59,5 +55,10 @@ class Facture
         return $this->reservation;
     }
 
-
+    public function setReservation(?Reservation $reservation): self
+    {
+        $this->reservation = $reservation;
+        return $this;
+    }
 }
+

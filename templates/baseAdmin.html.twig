@@ -1,117 +1,152 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" lang="zxx">
-
+<html lang="fr">
 <head>
-
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-
-    <title>Hotux</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <title>IH-AR | Admin</title>
 
     <!-- Favicon -->
-    <link rel="shortcut icon" type="image/x-icon" href="{{asset('assets/images/favicon.png')}}">
-    <!-- Bootstrap core CSS -->
-    <link href="{{ asset('assets/css/bootstrap.min.css')}}" rel="stylesheet" type="text/css">
-    <!--Default CSS-->
-    <link href="{{ asset('assets/css/default.css')}}" rel="stylesheet" type="text/css">
-    <!--Custom CSS-->
-    <link href="{{ asset('assets/css/style.css')}}" rel="stylesheet" type="text/css">
-    <!--Plugin CSS-->
-    <link href="{{ asset('assets/css/plugin.css')}}" rel="stylesheet" type="text/css">
-    <!--Dashboard CSS-->
-    <link href="{{ asset('assets/css/dashboard.css')}}" rel="stylesheet" type="text/css">
-    <!--Icons CSS-->
-    <link href="{{ asset('assets/css/icons.css')}}" rel="stylesheet" type="text/css">
+    <link rel="shortcut icon" href="{{ asset('assets/images/favicon.png') }}">
 
-    <!--Font Awesome-->
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css')}}">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.min.css')}}">
-    {% block stylesheets %}
-    {% endblock %}
+    <!-- Bootstrap -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/4.3.1/css/bootstrap.min.css">
+
+    <!-- Core CSS -->
+    <link rel="stylesheet" href="{{ asset('assets/css/default.css') }}">
+    <link rel="stylesheet" href="{{ asset('assets/css/style.css') }}">
+    <link rel="stylesheet" href="{{ asset('assets/css/plugin.css') }}">
+    <link rel="stylesheet" href="{{ asset('assets/css/dashboard.css') }}">
+    <link rel="stylesheet" href="{{ asset('assets/css/icons.css') }}">
+
+    <!-- Font Awesome (UNE SEULE FOIS – CORRECT) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+
+    {% block stylesheets %}{% endblock %}
 </head>
+
 <body>
-<!-- Preloader -->
+
 <div id="preloader">
     <div id="status"></div>
 </div>
-<!-- Preloader Ends -->
 
-<!-- start Container Wrapper -->
 <div id="container-wrapper">
-    <!-- Dashboard -->
     <div id="dashboard">
 
-        <!-- Responsive Navigation Trigger -->
-        <a href="#" class="dashboard-responsive-nav-trigger"><i class="fa fa-reorder"></i> Dashboard Navigation</a>
+        <!-- Top Nav -->
         <div class="dashboard-sticky-nav">
             <div class="content-left pull-left">
-                <a href="dashboard.html"><img src="{{asset('assets/images/logo.png')}}" alt="logo"></a>
+                <a href="{{ path('app_dashboard') }}">
+                    <img src="{{ asset('uploads/images/default.png') }}" alt="logo">
+                </a>
             </div>
+
             <div class="content-right pull-right">
-                <div class="dropdown">
+                {% if app.user %}
                     <a href="{{ path('account_edit', {'id': app.user.id}) }}">
                         <div class="profile-sec">
                             <div class="dash-image">
-                                <img src="{{ asset(app.user.image) }}" alt="">
+                                <img src="{{ app.user.image ? asset(app.user.image) : asset('assets/images/default-avatar.png') }}" alt="">
                             </div>
                             <div class="dash-content">
-                                <h4>{{ app.user.nom }}</h4>
+                                <h4>{{ app.user.nom ?? app.user.email }}</h4>
                                 <span>Admin</span>
                             </div>
                         </div>
                     </a>
-
-                </div>
-
+                {% endif %}
             </div>
         </div>
+
+        <!-- Sidebar -->
         <div class="dashboard-nav">
             <div class="dashboard-nav-inner">
                 <ul>
-                    <li class="{%  if selected is defined and selected=='dashboard'%} active{% endif %}"><a href="{{ path('app_dashboard') }}"><i class="sl sl-icon-settings"></i> Tableau de bord</a></li>
-                    <li> <a href="{{ path('all_room') }}"><i class="sl sl-icon-layers"></i> Rooms</a>
-                    <li> <a href="{{ path('all_event') }}"><i class="sl sl-icon-layers"></i> Events</a>
-                    <li> <a href="{{ path('admin_reservation_list') }}"><i class="sl sl-icon-layers"></i> Reservation</a>
-                    <li> <a href="{{ path('app_service_list') }}"><i class="sl sl-icon-layers"></i> Services</a>
-                    <li> <a href="{{ path('admin_client_list') }}"><i class="sl sl-icon-layers"></i> Users</a>
 
+                    <li class="{% if selected == 'dashboard' %}active{% endif %}">
+                        <a href="{{ path('app_dashboard') }}">
+                            <i class="sl sl-icon-settings"></i> Tableau de bord
+                        </a>
+                    </li>
 
-                    <li> <a href="{{ path('app_home') }}"><i class="sl sl-icon-layers"></i> User Interface</a>
+                    <li class="{% if selected == 'chambre' %}active{% endif %}">
+                        <a href="{{ path('all_room') }}">
+                            <i class="sl sl-icon-layers"></i> Rooms
+                        </a>
+                        <ul>
+                            <li><a href="{{ path('all_room') }}">Liste des Rooms</a></li>
+                            <li><a href="{{ path('ajout_room') }}">Ajouter une Room</a></li>
+                        </ul>
+                    </li>
 
+                    <li class="{% if selected == 'evenement' %}active{% endif %}">
+                        <a href="{{ path('all_event') }}">
+                            <i class="sl sl-icon-layers"></i> Events
+                        </a>
+                        <ul>
+                            <li><a href="{{ path('all_event') }}">Liste des Events</a></li>
+                            <li><a href="{{ path('ajout_event') }}">Ajouter un Event</a></li>
+                        </ul>
+                    </li>
 
+                    <!-- 🔥 RÉSERVATIONS (CORRIGÉ) -->
+                    <li class="{% if selected == 'reservations' %}active{% endif %}">
+                        <a href="{{ path('admin_reservations') }}">
+                            <i class="sl sl-icon-calendar"></i> Reservations
+                        </a>
+                    </li>
 
-                    <li><a href="{{ path('app_logout') }}"><i class="sl sl-icon-power"></i> Déconnexion</a></li>
+                    <li>
+                        <a href="{{ path('app_service_list') }}">
+                            <i class="sl sl-icon-layers"></i> Services
+                        </a>
+                    </li>
+
+                    <li>
+                        <a href="{{ path('admin_client_list') }}">
+                            <i class="sl sl-icon-user"></i> Users
+                        </a>
+                    </li>
+
+                    <li>
+                        <a href="{{ path('app_home') }}">
+                            <i class="sl sl-icon-screen-desktop"></i> User Interface
+                        </a>
+                    </li>
+
+                    <li>
+                        <a href="{{ path('app_logout') }}">
+                            <i class="sl sl-icon-power"></i> Déconnexion
+                        </a>
+                    </li>
+
                 </ul>
             </div>
         </div>
-        <div class="dashboard-content">
 
-{% block body %}{% endblock %}
+        <!-- Content -->
+        <div class="dashboard-content">
+            {% block body %}{% endblock %}
         </div>
+
     </div>
 </div>
-<!-- end Container Wrapper -->
 
-<!-- Back to top start -->
-<div id="back-to-top">
-    <a href="#"></a>
-</div>
-<!-- Back to top ends -->
-
-
-<script src="{{ asset('assets/js/jquery-3.3.1.min.js') }}"></script>
-<script src="{{ asset('assets/js/bootstrap.min.js') }}"></script>
+<!-- JS -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/4.3.1/js/bootstrap.min.js"></script>
 <script src="{{ asset('assets/js/plugin.js') }}"></script>
 <script src="{{ asset('assets/js/main.js') }}"></script>
-<script src="{{ asset('assets/https://canvasjs.com/assets/script/canvasjs.min.js') }}"></script>
+
+<!-- CanvasJS (CORRECT) -->
+<script src="https://canvasjs.com/assets/script/canvasjs.min.js"></script>
+
+<!-- Charts -->
 <script src="{{ asset('assets/js/chart.js') }}"></script>
 <script src="{{ asset('assets/js/dashboard.js') }}"></script>
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
-{% block javascripts %}
-{% endblock %}
+{% block javascripts %}{% endblock %}
 </body>
+</html>
 
 </html>
