@@ -30,8 +30,8 @@ class RoomFixtures extends Fixture
 
         foreach ($rooms as $data) {
             $room = new Room();
-            $room->setTitle($data['title']);
-            $room->setPrice($data['price']);
+            $room->setName($data['title']);
+            $room->setPrix($data['price']);
             $room->setImage($data['image']);
 
             $manager->persist($room);
