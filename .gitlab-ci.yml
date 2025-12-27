@@ -32,13 +32,18 @@ phpunit:
     - apt-get update && apt-get install -y git unzip libzip-dev libicu-dev libpng-dev libjpeg62-turbo-dev libfreetype6-dev
     - docker-php-ext-configure gd --with-freetype --with-jpeg
     - docker-php-ext-install pdo_mysql zip intl gd
+    - pecl install xdebug
+    - docker-php-ext-enable xdebug
     - php -v
   script:
-    - php bin/phpunit --configuration phpunit.xml.dist --colors=always --log-junit junit.xml
+    - mkdir -p var
+    - php -dxdebug.mode=coverage bin/phpunit --configuration phpunit.xml.dist --colors=always --log-junit junit.xml --coverage-clover var/coverage.xml
   artifacts:
     when: always
     reports:
       junit: junit.xml
+    paths:
+      - var/coverage.xml
 
 phpstan:
   stage: analyze
@@ -78,8 +83,10 @@ sonarqube:
   image: sonarsource/sonar-scanner-cli:5
   rules:
     - if: '$SONAR_HOST_URL && $SONAR_TOKEN'
+  needs:
+    - phpunit
   script:
-    - sonar-scanner
+    - sonar-scanner -Dsonar.projectKey=ih-ar-symfony -Dsonar.projectName=ih-ar-symfony -Dsonar.sources=src -Dsonar.tests=tests -Dsonar.sourceEncoding=UTF-8 -Dsonar.php.coverage.reportPaths=var/coverage.xml
   variables:
     SONAR_HOST_URL: $SONAR_HOST_URL
     SONAR_LOGIN: $SONAR_TOKEN
