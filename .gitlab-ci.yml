@@ -86,7 +86,13 @@ sonarqube:
   needs:
     - phpunit
   script:
-    - sonar-scanner -Dsonar.projectKey=ih-ar-symfony -Dsonar.projectName=ih-ar-symfony -Dsonar.sources=src -Dsonar.tests=tests -Dsonar.sourceEncoding=UTF-8 -Dsonar.php.coverage.reportPaths=var/coverage.xml
+    - |
+      EXTRA_ARGS=""
+      if [ -n "$SONAR_ORGANIZATION" ]; then
+        EXTRA_ARGS="$EXTRA_ARGS -Dsonar.organization=$SONAR_ORGANIZATION"
+      fi
+      EXTRA_ARGS="$EXTRA_ARGS -Dsonar.projectVersion=$CI_COMMIT_SHORT_SHA -Dsonar.branch.name=$CI_COMMIT_BRANCH"
+      sonar-scanner -Dsonar.projectKey=ih-ar-symfony -Dsonar.projectName=ih-ar-symfony -Dsonar.sources=src -Dsonar.tests=tests -Dsonar.sourceEncoding=UTF-8 -Dsonar.php.coverage.reportPaths=var/coverage.xml $EXTRA_ARGS
   variables:
     SONAR_HOST_URL: $SONAR_HOST_URL
     SONAR_LOGIN: $SONAR_TOKEN
