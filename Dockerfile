@@ -20,7 +20,7 @@ COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 WORKDIR /var/www/html
 
 COPY composer.json composer.lock ./
-RUN composer install --no-dev --prefer-dist --no-interaction --no-progress
+RUN composer install --no-dev --prefer-dist --no-interaction --no-progress --no-scripts
 
 COPY . .
 
@@ -31,4 +31,3 @@ ENV APP_ENV=prod
 ENV SYMFONY_ENV=prod
 
 CMD ["php-fpm"]
-
