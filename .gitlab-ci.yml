@@ -61,11 +61,15 @@ docker_build_push:
     DOCKER_DRIVER: overlay2
   script:
     - |
-      if [ -z "$DOCKERHUB_USERNAME" ] || [ -z "$DOCKERHUB_TOKEN" ]; then
-        echo "Skipping Docker build/push: missing DOCKERHUB_USERNAME or DOCKERHUB_TOKEN"
+      if [ -z "$DOCKERHUB_USERNAME" ] || { [ -z "$DOCKERHUB_TOKEN" ] && [ -z "$DOCKERHUB_PASSWORD" ]; }; then
+        echo "Skipping Docker build/push: missing Docker Hub credentials"
         exit 0
       fi
-    - echo "$DOCKERHUB_TOKEN" | docker login -u "$DOCKERHUB_USERNAME" --password-stdin
+      if [ -n "$DOCKERHUB_TOKEN" ]; then
+        echo "$DOCKERHUB_TOKEN" | docker login -u "$DOCKERHUB_USERNAME" --password-stdin
+      else
+        echo "$DOCKERHUB_PASSWORD" | docker login -u "$DOCKERHUB_USERNAME" --password-stdin
+      fi
     - docker build -t $DOCKERHUB_USERNAME/ih-ar-app:$CI_COMMIT_SHORT_SHA -t $DOCKERHUB_USERNAME/ih-ar-app:latest .
     - docker push $DOCKERHUB_USERNAME/ih-ar-app --all-tags
 
