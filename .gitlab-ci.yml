@@ -86,15 +86,4 @@ sonarqube:
   rules:
     - if: '$SONAR_TOKEN'
   script:
-    - sonar-scanner \
-        -Dsonar.host.url=$SONAR_HOST_URL \
-        -Dsonar.login=$SONAR_TOKEN \
-        -Dsonar.organization=$SONAR_ORGANIZATION \
-        -Dsonar.projectKey=$SONAR_PROJECT_KEY \
-        -Dsonar.projectName=ih-ar-symfony \
-        -Dsonar.projectVersion=$CI_COMMIT_SHORT_SHA \
-        -Dsonar.branch.name=$CI_COMMIT_BRANCH \
-        -Dsonar.sources=src \
-        -Dsonar.tests=tests \
-        -Dsonar.sourceEncoding=UTF-8 \
-        -Dsonar.php.coverage.reportPaths=var/coverage.xml
+    - sonar-scanner -Dsonar.host.url=$SONAR_HOST_URL -Dsonar.login=$SONAR_TOKEN -Dsonar.organization=$SONAR_ORGANIZATION -Dsonar.projectKey=$SONAR_PROJECT_KEY -Dsonar.projectName=ih-ar-symfony -Dsonar.projectVersion=$CI_COMMIT_SHORT_SHA -Dsonar.branch.name=$CI_COMMIT_BRANCH -Dsonar.sources=src -Dsonar.tests=tests -Dsonar.sourceEncoding=UTF-8 -Dsonar.php.coverage.reportPaths=var/coverage.xml
