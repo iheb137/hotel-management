@@ -81,18 +81,20 @@ docker_build_push:
 sonarqube:
   stage: analyze
   image: sonarsource/sonar-scanner-cli:5
-  rules:
-    - if: '$SONAR_HOST_URL && $SONAR_TOKEN'
   needs:
     - phpunit
+  rules:
+    - if: '$SONAR_TOKEN'
   script:
-    - |
-      EXTRA_ARGS=""
-      if [ -n "$SONAR_ORGANIZATION" ]; then
-        EXTRA_ARGS="$EXTRA_ARGS -Dsonar.organization=$SONAR_ORGANIZATION"
-      fi
-      EXTRA_ARGS="$EXTRA_ARGS -Dsonar.projectVersion=$CI_COMMIT_SHORT_SHA -Dsonar.branch.name=$CI_COMMIT_BRANCH"
-      sonar-scanner -Dsonar.projectKey=ih-ar-symfony -Dsonar.projectName=ih-ar-symfony -Dsonar.sources=src -Dsonar.tests=tests -Dsonar.sourceEncoding=UTF-8 -Dsonar.php.coverage.reportPaths=var/coverage.xml $EXTRA_ARGS
-  variables:
-    SONAR_HOST_URL: $SONAR_HOST_URL
-    SONAR_LOGIN: $SONAR_TOKEN
+    - sonar-scanner \
+        -Dsonar.host.url=$SONAR_HOST_URL \
+        -Dsonar.login=$SONAR_TOKEN \
+        -Dsonar.organization=$SONAR_ORGANIZATION \
+        -Dsonar.projectKey=$SONAR_PROJECT_KEY \
+        -Dsonar.projectName=ih-ar-symfony \
+        -Dsonar.projectVersion=$CI_COMMIT_SHORT_SHA \
+        -Dsonar.branch.name=$CI_COMMIT_BRANCH \
+        -Dsonar.sources=src \
+        -Dsonar.tests=tests \
+        -Dsonar.sourceEncoding=UTF-8 \
+        -Dsonar.php.coverage.reportPaths=var/coverage.xml
