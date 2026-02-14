@@ -1,7 +1,7 @@
 /*------------------------------------------------------------------
-* Project:        Hotux
-* Author:         CN-InfoTech
-* URL:            hthttps://themeforest.net/user/cn-infotech
+* Project:        Hotel Management
+* Author:         IHEBEDDINE SAAFI (2025)
+* Email:          saafiiheb.si@gmail.com
 * Created:        01/08/2020
 -------------------------------------------------------------------*/
 

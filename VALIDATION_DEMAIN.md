@@ -74,7 +74,7 @@
 
 ### Personnalisation
 - **Nom de l'hôtel** : IH-AR (au lieu de Hotux)
-- **Copyright** : "Made by Ihebeddine saafi et arbi hazbri (ING-4-J-GLCI-C) - 2025"
+- **Copyright** : "Made by IHEBEDDINE SAAFI (2025)"
 - **Email** : info@ih-ar.com
 
 ## 🔧 Commandes utiles pendant la validation
