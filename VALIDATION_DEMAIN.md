@@ -164,4 +164,3 @@ php bin/console cache:clear
 - [ ] Le logo et le design sont corrects
 - [ ] Le copyright est affiché
 
-**Bonne chance pour la validation ! 🎉**
